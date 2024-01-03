@@ -37,6 +37,7 @@ class Character extends MovableObject {
             if (this.world.keyboard.SPACE) {
                 this.x += this.speed;
             }
+            this.world.camera_x = -this.x
         }, 1000 / 60);
 
         setInterval(() => {
