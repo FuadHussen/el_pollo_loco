@@ -1,22 +1,6 @@
 class World {
     character = new Character('img/2_character_pepe/2_walk/W-21.png');
-    enemies = [
-        new Chicken(),
-        new Chicken(),
-        new Chicken()
-    ];
-    smallEnemies = [
-        new SmallChicken(),
-        new SmallChicken(),
-        new SmallChicken()
-    ];
-    clouds = [
-        new Cloud()
-    ];
-    backgroundObjects = [];
-    totalBackgrounds = 4;
-    backgroundsPerSet = 4;
-    backgroundWidth = 719;
+    level = level1;
     canvas;
     ctx;
     keyboard;
@@ -41,11 +25,11 @@ class World {
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.ctx.translate(this.camera_x, 0);
-        this.addObjectsToMap(this.backgroundObjects)
-        this.addObjectsToMap(this.clouds)
+        this.addObjectsToMap(this.level.backgroundObjects)
+        this.addObjectsToMap(this.level.clouds)
         this.addToMap(this.character);
-        this.addObjectsToMap(this.enemies)
-        this.addObjectsToMap(this.smallEnemies)
+        this.addObjectsToMap(this.level.enemies)
+        this.addObjectsToMap(this.level.smallEnemies)
         this.ctx.translate(-this.camera_x, 0);
 
         //Draw() wird immer wieder aufgerufen
