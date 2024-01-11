@@ -22,7 +22,7 @@ class MovableObject {
     }
 
 
-    isAboveGround(){
+    isAboveGround() {
         return this.y < 70
     }
 
@@ -30,6 +30,20 @@ class MovableObject {
     loadImage(path) {
         this.img = new Image(); //this.img = document.getElementById('img') <img id="img">
         this.img.src = path;
+    }
+
+
+    draw(ctx){
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
+
+
+    drawFrame(ctx){
+        ctx.beginPath();
+        ctx.lineWidth = '5';
+        ctx.strokeStyle = 'blue';
+        ctx.rect(this.x, this.y, this.width, this.height);
+        ctx.stroke();
     }
 
     /**
@@ -54,8 +68,16 @@ class MovableObject {
 
 
     moveLeft() {
-        setInterval(() => {
-            this.x -= this.speed;
-        }, 1000 / 60);
+        this.x -= this.speed;
+    }
+
+
+    moveRight() {
+        this.x += this.speed;
+    }
+
+
+    jump() {
+        this.speedY = 25;
     }
 }
