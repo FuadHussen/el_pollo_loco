@@ -14,11 +14,26 @@ class World {
         this.generateBackgroundObjects();
         this.draw();
         this.setWorld();
+        this.checkCollisions();
     }
 
 
     setWorld() {
         this.character.world = this;
+    }
+
+
+    checkCollisions() {
+        setInterval(() => {
+            this.level.enemies.forEach((enemy) => {
+                if ( this.character.isColliding(enemy) ) {
+                    this.character.energy -= 10;
+                    this.character.setHurt();
+                    this.character.setDead();
+                    console.log('collision with character ', enemy, this.character.energy);
+                }
+            });
+        }, 200);
     }
 
 
