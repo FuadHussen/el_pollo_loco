@@ -53,9 +53,22 @@ class MovableObject {
 
     isColliding(obj) {
         return this.x + this.width > obj.x &&
-        this.y + this.height > obj.y &&
-        this.x < obj.x &&
-        this.y < obj.y + obj.height;
+            this.y + this.height > obj.y &&
+            this.x < obj.x &&
+            this.y < obj.y + obj.height;
+    }
+
+
+    hit() {
+        this.energy -= 5;
+        if (this.energy < 0) {
+            this.energy = 0;
+        }
+    }
+
+
+    isDead(){
+        return this.energy == 0;
     }
 
     /**
