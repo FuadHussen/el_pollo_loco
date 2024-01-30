@@ -16,12 +16,12 @@ class World {
         'img/7_statusbars/3_icons/icon_coin.png'
     ];
 
-    BOTTLE =[
+    BOTTLE = [
         'img/6_salsa_bottle/1_salsa_bottle_on_ground.png',
         'img/6_salsa_bottle/2_salsa_bottle_on_ground.png'
     ];
-    MAX_COINS = 10;
-    MAX_BOTTLES = 10;
+    MAX_COINS = 5;
+    MAX_BOTTLES = 9;
 
 
     constructor(canvas, keyboard) {
@@ -112,7 +112,6 @@ class World {
     checkThrowObjects() {
         if (this.keyboard.D) {
             let bottle = new ThrowAbleObject(this.character.x + 100, this.character.y + 100);
-
             this.throwAbleObject.push(bottle);
         }
     }
@@ -126,13 +125,14 @@ class World {
                 this.statusBar.setPercentage(this.character.energy);
             }
         });
-    
+
         // Überprüfen Kollisionen mit Münzen
         for (let i = 0; i < this.coins.length; i++) {
             const coin = this.coins[i];
             if (this.character.isColliding(coin)) {
-                this.coins.splice(i, 1); 
-                i--; 
+                this.coin.setPercentage(this.coin.percentage + 20);
+                this.coins.splice(i, 1);
+                i--;
             }
         }
 
@@ -140,12 +140,15 @@ class World {
         for (let i = 0; i < this.bottles.length; i++) {
             const bottle = this.bottles[i];
             if (this.character.isColliding(bottle)) {
-                this.bottles.splice(i, 1); 
-                i--; 
+                this.bottle.setPercentage(this.bottle.percentage + 20);
+                if (this.bottle.percentage <= 100) {
+                    this.bottles.splice(i, 1);
+                    i--;
+                }
             }
         }
     }
-    
+
 
 
     draw() {
