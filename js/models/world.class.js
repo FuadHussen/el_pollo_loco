@@ -10,6 +10,8 @@ class World {
     bottle = new Bottle();
     coins = [];
     bottles = [];
+    activeBottles = [];
+    pickedUpBottles = 0;
     throwAbleObject = [];
 
     COIN = [
@@ -110,9 +112,14 @@ class World {
 
 
     checkThrowObjects() {
-        if (this.keyboard.D) {
+        if (this.keyboard.D && this.pickedUpBottles > 0) { 
             let bottle = new ThrowAbleObject(this.character.x + 100, this.character.y + 100);
             this.throwAbleObject.push(bottle);
+            this.pickedUpBottles--;
+
+            if (this.pickedUpBottles) {
+                this.bottle.setPercentage(this.bottle.percentage - 20);
+            }
         }
     }
 
@@ -144,11 +151,11 @@ class World {
                 if (this.bottle.percentage <= 100) {
                     this.bottles.splice(i, 1);
                     i--;
+                    this.pickedUpBottles++; // Increase the number of picked up bottles
                 }
             }
         }
     }
-
 
 
     draw() {
