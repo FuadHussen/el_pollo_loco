@@ -66,8 +66,8 @@ class ThrowAbleObject extends MovableObject {
             clearInterval(animationInterval);
         }, 2000);
     }
-    
-
+      
+  
     setupAnimation() {
         setInterval(() => {
             this.currentImage = (this.currentImage + 1) % this.BOTTLE_ROTATION.length;
