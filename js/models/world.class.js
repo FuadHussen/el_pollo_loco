@@ -8,6 +8,7 @@ class World {
     statusBar = new StatusBar();
     coin = new Coin();
     bottle = new Bottle();
+    endboss = new Endboss();
     coins = [];
     bottles = [];
     activeBottles = [];
@@ -48,8 +49,13 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
+    
+            if (this.character.x >= 2050) {
+                console.log("Character reached x = 2050");
+                this.endboss.animate();
+            }
         }, 250);
-    }
+    }    
 
 
     generateBottles() {

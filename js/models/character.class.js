@@ -31,7 +31,9 @@ class Character extends MovableObject {
     ];
 
     world;
+
     walking_sound = new Audio('audio/running.mp3');
+
     isWalking = false;
 
     IMAGES_DEAD = [
@@ -42,10 +44,12 @@ class Character extends MovableObject {
         'img/2_character_pepe/5_dead/D-55.png',
         'img/2_character_pepe/5_dead/D-56.png',
         'img/2_character_pepe/5_dead/D-57.png'
-    ]
+    ];
 
-    constructor() {
+
+    constructor(world) {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
+        this.world = world;
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_DEAD);
@@ -53,7 +57,6 @@ class Character extends MovableObject {
         this.applyGravitiy();
         this.animate();
     }
-
 
     animate() {
         setInterval(() => {
@@ -76,7 +79,7 @@ class Character extends MovableObject {
             }
 
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-                this.jump(); 
+                this.jump();
             }
             this.world.camera_x = -this.x + 100;
         }, 1000 / 1000);
