@@ -27,9 +27,8 @@ class Endboss extends MovableObject {
 
 
 
-    constructor(world) {
+    constructor() {
         super().loadImage('img/4_enemie_boss_chicken/2_alert/G5.png');
-        this.world = world;
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.ENDBOSS_WALKING);
         this.x = 2450;
@@ -53,7 +52,7 @@ class Endboss extends MovableObject {
                 i = 0;
                 this.hadFirstContact = true;
                 setInterval(() => {
-                    this.moveLeft(this.speed = 2);                    
+                    this.moveLeft(this.speed = 1);                    
                 }, 1000 / 60);
             }
         }, 200);

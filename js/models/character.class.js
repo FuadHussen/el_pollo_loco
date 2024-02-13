@@ -3,6 +3,8 @@ class Character extends MovableObject {
     height = 280;
     y = 70;
     speed = 2;
+    currentEnemy;
+    currentChicken = null;
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -30,11 +32,14 @@ class Character extends MovableObject {
         'img/2_character_pepe/4_hurt/H-43.png',
     ];
 
+    GAME_OVER = ['img/9_intro_outro_screens/game_over/game over.png'];
+
     world;
 
     walking_sound = new Audio('audio/running.mp3');
 
     isWalking = false;
+    jumpedOnChicken = false;
 
     IMAGES_DEAD = [
         'img/2_character_pepe/5_dead/D-51.png',
@@ -46,22 +51,53 @@ class Character extends MovableObject {
         'img/2_character_pepe/5_dead/D-57.png'
     ];
 
+    offset = {
+        top: 120,
+        left: 40,
+        right: 30,
+        bottom: 20,
+    };
 
-    constructor(world) {
+
+    constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
-        this.world = world;
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.GAME_OVER);
         this.applyGravitiy();
         this.animate();
     }
 
-    animate() {
-        setInterval(() => {
 
-            this.walking_sound.pause();
+    isJumping() {
+        return this.speedY < -25; // Überprüfen, ob der Charakter springt
+    }
+
+
+    checkChickenCollision() {
+        this.world.level.enemies.forEach(chicken => {
+            let collisionBox = {
+                x: this.x - this.offset.left,
+                y: this.y - this.offset.top,
+                width: this.width + this.offset.left + this.offset.right,
+                height: this.height + this.offset.top + this.offset.bottom
+            };
+        });
+    }
+
+
+    isAboveChicken(chicken) {
+        return this.y < chicken.y;
+    }
+
+
+    animate() {
+        let i = 0;
+
+        setInterval(() => {
+            // this.walking_sound.pause();
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 this.otherDirection = false;
@@ -81,13 +117,24 @@ class Character extends MovableObject {
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
                 this.jump();
             }
-            this.world.camera_x = -this.x + 100;
-        }, 1000 / 1000);
 
+            this.world.camera_x = -this.x + 100;
+
+            // Hier die Überprüfung auf Kollision mit Hühnern einfügen
+            this.checkChickenCollision();
+
+        }, 1000 / 1000);
 
         setInterval(() => {
             if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
+                if (i < 7) {
+                    this.playAnimation(this.IMAGES_DEAD);
+                    setTimeout(() => {
+                        this.world.showEndScreen();
+                    }, 1000);
+                    this.walking_sound.pause();
+                }
+                i++;
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
@@ -98,6 +145,18 @@ class Character extends MovableObject {
                 }
             }
         }, 100);
+
+        setInterval(() => {
+            if (this.currentEnemy && this.currentEnemy instanceof Chicken && this.currentEnemy.isDead()) {
+                this.currentEnemy.deadChicken();
+            }
+        }, 200);
+
+        setInterval(() => {
+            if (this.currentEnemy && this.currentEnemy instanceof SmallChicken && this.currentEnemy.isDead()) {
+                this.currentEnemy.deadSmallChicken();
+            }
+        }, 200);
     }
 
 

@@ -26,7 +26,6 @@ class World {
     MAX_COINS = 5;
     MAX_BOTTLES = 9;
 
-
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -49,13 +48,8 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-    
-            if (this.character.x >= 2050) {
-                console.log("Character reached x = 2050");
-                this.endboss.animate();
-            }
         }, 250);
-    }    
+    }
 
 
     generateBottles() {
@@ -77,8 +71,8 @@ class World {
 
     generateCoins() {
         for (let i = 0; i < this.MAX_COINS; i++) {
-            const coinPath = this.COIN[0];  // Verwenden Sie das einzige verfügbare Münzbild
-            const coin = new Coin();
+            let coinPath = this.COIN; 
+            let coin = new Coin();
             coin.loadImage(coinPath);
 
             if (i % 5 === 0) {
@@ -118,7 +112,7 @@ class World {
 
 
     checkThrowObjects() {
-        if (this.keyboard.D && this.pickedUpBottles > 0) { 
+        if (this.keyboard.D && this.pickedUpBottles > 0) {
             let bottle = new ThrowAbleObject(this.character.x + 100, this.character.y + 100);
             this.throwAbleObject.push(bottle);
             this.pickedUpBottles--;
@@ -131,14 +125,19 @@ class World {
 
 
     checkCollisions() {
-        // Überprüfen Kollisionen mit Feinden
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy)) {
-                this.character.hit();
-                this.statusBar.setPercentage(this.character.energy);
+            if (!enemy.isDead()) {
+                if (this.character.isColliding(enemy)) {
+                    if (this.character.isAboveGround(enemy) && !this.character.isHurt()) {
+                        enemy.energy = 0;
+                    } else {
+                        this.character.hit();
+                        this.statusBar.setPercentage(this.character.energy);
+                    }
+                }
             }
         });
-
+        
         // Überprüfen Kollisionen mit Münzen
         for (let i = 0; i < this.coins.length; i++) {
             const coin = this.coins[i];
@@ -157,11 +156,20 @@ class World {
                 if (this.bottle.percentage <= 100) {
                     this.bottles.splice(i, 1);
                     i--;
-                    this.pickedUpBottles++; // Increase the number of picked up bottles
+                    this.pickedUpBottles++; 
                 }
             }
         }
     }
+    
+
+    removeChicken(chicken) {
+        let index = this.level.enemies.indexOf(chicken);
+        if (index !== -1) {
+            this.level.enemies.splice(index, 1);
+        }
+    }
+    
 
 
     draw() {
@@ -251,5 +259,14 @@ class World {
                 );
             }
         }
+    }
+
+
+    showEndScreen() {
+        document.getElementById("endScreen").style.display = "block";
+        document.getElementById("canvas").classList.add("d-none");
+        document.getElementById("endScreen").classList.remove("d-none");
+        this.character.walking_sound.pause();
+        document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
     }
 }

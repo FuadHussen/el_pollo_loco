@@ -2,15 +2,16 @@ let canvas;
 let world;
 let character;
 let keyboard = new Keyboard();
+walking_sound = new Audio('audio/running.mp3');
 
 
 function init() {
+    initLevel();
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
 
     document.getElementById("startGame").addEventListener("click", function () {
         document.getElementById("startScreen").classList.add("d-none");
-
         document.getElementById("canvas").classList.remove("d-none");
     });
 }

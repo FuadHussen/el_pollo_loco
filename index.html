@@ -8,7 +8,6 @@
     <title>El Pollo Loco</title>
     <link rel="shortcut icon" href="./img/cactus-157994_1280.ico" type="image/x-icon">
     <script src="./js/models/drawable-object.class.js"></script>
-    <script src="js/models/start-end-screen.class.js"></script>
     <script src="./js/models/movable-object.class.js"></script>
     <script src="./js/models/character.class.js"></script>
     <script src="./js/models/chicken.class.js"></script>
@@ -39,8 +38,15 @@
         </div>
 
     <canvas class="d-none" id="canvas" width="720" height="480">
-
     </canvas>
+
+    <div id="endScreen" class="endScreen">
+      <div class="endScreenDiv">
+        <button class="endGame" onclick="window.location.reload()">
+          NEW GAME
+        </button>
+      </div>
+    </div>
 </body>
 
 </html>
