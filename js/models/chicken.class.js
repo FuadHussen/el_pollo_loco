@@ -39,7 +39,7 @@ class Chicken extends MovableObject {
         if (this.isDead()) {
             setInterval(() => {
             world.removeChicken(this);
-            }, 500);
+            }, 100);
             this.playAnimation(this.IMAGES_DEAD);
         }
     }

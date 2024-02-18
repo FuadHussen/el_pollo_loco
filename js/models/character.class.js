@@ -39,7 +39,6 @@ class Character extends MovableObject {
     walking_sound = new Audio('audio/running.mp3');
 
     isWalking = false;
-    jumpedOnChicken = false;
 
     IMAGES_DEAD = [
         'img/2_character_pepe/5_dead/D-51.png',
@@ -71,28 +70,6 @@ class Character extends MovableObject {
     }
 
 
-    isJumping() {
-        return this.speedY < -25; // Überprüfen, ob der Charakter springt
-    }
-
-
-    checkChickenCollision() {
-        this.world.level.enemies.forEach(chicken => {
-            let collisionBox = {
-                x: this.x - this.offset.left,
-                y: this.y - this.offset.top,
-                width: this.width + this.offset.left + this.offset.right,
-                height: this.height + this.offset.top + this.offset.bottom
-            };
-        });
-    }
-
-
-    isAboveChicken(chicken) {
-        return this.y < chicken.y;
-    }
-
-
     animate() {
         let i = 0;
 
@@ -119,10 +96,6 @@ class Character extends MovableObject {
             }
 
             this.world.camera_x = -this.x + 100;
-
-            // Hier die Überprüfung auf Kollision mit Hühnern einfügen
-            this.checkChickenCollision();
-
         }, 1000 / 1000);
 
         setInterval(() => {
@@ -146,17 +119,13 @@ class Character extends MovableObject {
             }
         }, 100);
 
-        setInterval(() => {
-            if (this.currentEnemy && this.currentEnemy instanceof Chicken && this.currentEnemy.isDead()) {
-                this.currentEnemy.deadChicken();
-            }
-        }, 200);
+        if (this.currentEnemy && this.currentEnemy instanceof Chicken && this.currentEnemy.isDead()) {
+            this.currentEnemy.deadChicken();
+        }
 
-        setInterval(() => {
-            if (this.currentEnemy && this.currentEnemy instanceof SmallChicken && this.currentEnemy.isDead()) {
-                this.currentEnemy.deadSmallChicken();
-            }
-        }, 200);
+        if (this.currentEnemy && this.currentEnemy instanceof SmallChicken && this.currentEnemy.isDead()) {
+            this.currentEnemy.deadSmallChicken();
+        }
     }
 
 
