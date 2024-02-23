@@ -22,24 +22,22 @@ class SmallChicken extends MovableObject {
 
 
     animate() {
-        setInterval(() => {
-            this.moveLeft();
-        }, 1000 / 60);
-    
-        setInterval(() => {
-            if (this.isDead()) {
-                this.deadSmallChicken();
-            } else {
+        let walkingInterval = setInterval(() => {
+            if (!this.dead) {
+                this.moveLeft();
                 this.playAnimation(this.IMAGES_WALKING);
+            } else {
+                clearInterval(walkingInterval); // Stops the walking animation
+                this.playAnimation(this.IMAGES_DEAD);
             }
-        }, 200);
-    }    
+        }, 5);
+    }
 
 
-    deadSmallChicken() {
+    deadChicken() {
         if (this.isDead()) {
             setInterval(() => {
-            world.removeChicken(this);
+                world.removeChicken(this);
             }, 100);
             this.playAnimation(this.IMAGES_DEAD);
         }
