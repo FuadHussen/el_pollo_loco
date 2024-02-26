@@ -95,7 +95,7 @@ body {
 }
 
 h1 {
-    color: rgba(249, 249, 249, 0.899);
+    color: black;
     font-size: 64px;
     letter-spacing: 3px;
     text-shadow: 2px 2px 2px rgb(0, 0, 0, .75);

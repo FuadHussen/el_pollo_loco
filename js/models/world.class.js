@@ -10,6 +10,8 @@ class World {
     bottle = new BottleStatusBar();
     endboss = new Endboss();
     endbossStatusbar = new EndbossStatusBar();
+    healthElement = new HealthElement();
+    endbossStatusBarVisible = false;
     coins = [];
     bottles = [];
     activeBottles = [];
@@ -116,9 +118,21 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.bottle);
         this.addToMap(this.coin);
-        this.addToMap(this.endbossStatusbar);
-        this.ctx.translate(this.camera_x, 0); // camera forwards
 
+        //wenn x achse erreicht wird 
+        if (this.character.x >= 2050) {
+            this.endbossStatusBarVisible = true;
+            this.addToMap(this.endbossStatusbar);
+            this.addToMap(this.healthElement);
+        }
+
+        // immer anzeigen der Endboss-Statusleiste 
+        if (this.endbossStatusBarVisible) {
+            this.addToMap(this.endbossStatusbar);
+            this.addToMap(this.healthElement);
+        }
+
+       this.ctx.translate(this.camera_x, 0); // camera forwards
 
         this.addObjectsToMap(this.level.clouds);
         this.addToMap(this.character);
@@ -127,6 +141,8 @@ class World {
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.smallEnemies);
         this.addObjectsToMap(this.throwAbleObject);
+
+        
 
         this.ctx.translate(-this.camera_x, 0);
 

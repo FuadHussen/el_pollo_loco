@@ -23,6 +23,18 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/1_walk/G4.png'
     ];
 
+    ENDBOSS_HURT = [
+        'img/4_enemie_boss_chicken/4_hurt/G21.png',
+        'img/4_enemie_boss_chicken/4_hurt/G22.png',
+        'img/4_enemie_boss_chicken/4_hurt/G23.png'
+    ];
+
+    ENDBOSS_DEAD = [
+        'img/4_enemie_boss_chicken/5_dead/G24.png',
+        'img/4_enemie_boss_chicken/5_dead/G25.png',
+        'img/4_enemie_boss_chicken/5_dead/G26.png'
+    ];
+
     hadFirstContact = false;
 
 
@@ -31,6 +43,8 @@ class Endboss extends MovableObject {
         super().loadImage('img/4_enemie_boss_chicken/2_alert/G5.png');
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.ENDBOSS_WALKING);
+        this.loadImages(this.ENDBOSS_HURT);
+        this.loadImages(this.ENDBOSS_DEAD);
         this.x = 2450;
         this.animate();
     }
@@ -38,21 +52,36 @@ class Endboss extends MovableObject {
 
     animate() {
         let i = 0;
+        let animationInterval;
+    
+        let startAnimation = () => {
+            animationInterval = setInterval(() => {
+                if (this.hadFirstContact) {
+                    
+                    this.playAnimation(this.ENDBOSS_WALKING);
+                } else {
+                    
+                    if (i < 8) {
+                        this.playAnimation(this.ENDBOSS_WALKING);
+                    } else {
+                        this.playAnimation(this.IMAGES_WALKING);
+                    }
+                    i++;
+                }
+            }, 200);
+        };
+    
+        startAnimation();
+    
+        // Überprüfen, ob der Endboss die 2050 erreicht hat
         setInterval(() => {
-
-            if (i < 8) {
-                this.playAnimation(this.ENDBOSS_WALKING);
-            } else {
-                this.playAnimation(this.IMAGES_WALKING);
-            }
-
-            i++;
-
             if (world.character.x >= 2050) {
-                i = 0;
-                this.hadFirstContact = true;
+                clearInterval(animationInterval); 
+                this.hadFirstContact = true; 
+                i = 0; 
+                startAnimation(); 
                 setInterval(() => {
-                    this.moveLeft(this.speed = 1);                    
+                    this.moveLeft(this.speed = 1);
                 }, 1000 / 60);
             }
         }, 200);
