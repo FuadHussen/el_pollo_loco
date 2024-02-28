@@ -2,7 +2,8 @@ let canvas;
 let world;
 let character;
 let keyboard = new Keyboard();
-walking_sound = new Audio('audio/running.mp3');
+background_sound = new Audio('audio/backgroundSound.mp3');
+
 
 
 function init() {
@@ -13,6 +14,7 @@ function init() {
     document.getElementById("startGame").addEventListener("click", function () {
         document.getElementById("startScreen").classList.add("d-none");
         document.getElementById("canvas").classList.remove("d-none");
+        background_sound.play();
     });
 }
 

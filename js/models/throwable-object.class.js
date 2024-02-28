@@ -21,6 +21,8 @@ class ThrowAbleObject extends MovableObject {
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
     ];
 
+    bottle_break = new Audio('audio/bottleBreak.mp3');
+
 
     constructor(x, y, direction) {
         super().loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
@@ -79,6 +81,7 @@ class ThrowAbleObject extends MovableObject {
             if (!this.splashPlayed) {
                 this.playSplashAnimation();
                 this.splashPlayed = true;
+                this.bottle_break.play();
             }
         } else {
             this.playAnimation(this.IMAGE_BOTTLE_ROTATION);

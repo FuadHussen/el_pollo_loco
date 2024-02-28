@@ -3,6 +3,7 @@ class Endboss extends MovableObject {
     width = 350;
     height = 350;
     y = 80;
+    endbossStatusbar = new EndbossStatusBar();
 
 
     IMAGES_WALKING = [
@@ -36,7 +37,8 @@ class Endboss extends MovableObject {
     ];
 
     hadFirstContact = false;
-
+    currentImageIndexHurt = 0;
+    endboss_sound = new Audio('audio/endbossSound.mp3');
 
 
     constructor() {
@@ -53,14 +55,14 @@ class Endboss extends MovableObject {
     animate() {
         let i = 0;
         let animationInterval;
-    
+
         let startAnimation = () => {
             animationInterval = setInterval(() => {
                 if (this.hadFirstContact) {
-                    
+
                     this.playAnimation(this.ENDBOSS_WALKING);
                 } else {
-                    
+
                     if (i < 8) {
                         this.playAnimation(this.ENDBOSS_WALKING);
                     } else {
@@ -70,20 +72,60 @@ class Endboss extends MovableObject {
                 }
             }, 200);
         };
-    
+
         startAnimation();
-    
+
         // Überprüfen, ob der Endboss die 2050 erreicht hat
         setInterval(() => {
             if (world.character.x >= 2050) {
-                clearInterval(animationInterval); 
-                this.hadFirstContact = true; 
-                i = 0; 
-                startAnimation(); 
+                this.endboss_sound.play();
+                clearInterval(animationInterval);
+                this.hadFirstContact = true;
+                i = 0;
+                startAnimation();
                 setInterval(() => {
-                    this.moveLeft(this.speed = 1);
+                    this.moveLeft(this.speed = 0.5);
                 }, 1000 / 60);
             }
         }, 200);
+        this.endboss_sound.pause();
+    }
+
+
+    endbossHurt() {
+        let animateInterval = setInterval(() => {
+            this.playAnimation(this.ENDBOSS_HURT);
+            this.currentImageIndexHurt++;
+            if (this.currentImageIndexHurt >= this.ENDBOSS_HURT.length) {
+                this.currentImageIndexHurt = 0;
+                world.endbossStatusbar.setPercentage(world.endbossStatusbar.percentage - 20);
+                clearInterval(animateInterval);
+            }
+        }, 1000 / 10);
+    }
+
+
+    deadAnimation() {
+        let animateInterval = setInterval(() => {
+            this.playAnimation(this.ENDBOSS_DEAD);
+            this.currentImageIndexHurt++;
+            if (this.currentImageIndexHurt >= this.ENDBOSS_DEAD.length) {
+                this.currentImageIndexHurt = 0;
+                clearInterval(animateInterval);
+            }
+        }, 1000 / 10);
+    }
+
+
+    getSmaller() {
+        if (world.endbossStatusbar.percentage > 90) {
+            this.width = 250;
+            this.height = 250;
+            this.y = 200;
+        } else if (world.endbossStatusbar.percentage > 40) {
+            this.width = 100;
+            this.height = 100;
+            this.y = 350;
+        }
     }
 }

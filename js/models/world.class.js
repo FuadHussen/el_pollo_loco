@@ -217,11 +217,11 @@ class World {
     }
 
 
-    // showEndScreen() {
-    //     document.getElementById("endScreen").style.display = "block";
-    //     document.getElementById("canvas").classList.add("d-none");
-    //     document.getElementById("endScreen").classList.remove("d-none");
-    //     this.character.walking_sound.pause();
-    //     document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
-    // }
+    showEndScreen() {
+        document.getElementById("endScreen").style.display = "block";
+        document.getElementById("canvas").classList.add("d-none");
+        document.getElementById("endScreen").classList.remove("d-none");
+        this.character.walking_sound.pause();
+        document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
+    }
 }

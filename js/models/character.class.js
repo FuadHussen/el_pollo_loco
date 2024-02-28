@@ -37,6 +37,9 @@ class Character extends MovableObject {
     world;
 
     walking_sound = new Audio('audio/running.mp3');
+    bottle_break = new Audio('audio/bottleBreak.mp3');
+    dead_chicken = new Audio('audio/deadChicken.mp3');
+    jump_sound = new Audio('audio/jump.mp3');
 
     isWalking = false;
 
@@ -93,10 +96,12 @@ class Character extends MovableObject {
 
             if (this.world.keyboard.UP && !this.isAboveGround()) {
                 this.jump();
+                this.jump_sound.play();
             }
 
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
                 this.jump();
+                this.jump_sound.play();
             }
 
             this.world.camera_x = -this.x + 100;
@@ -135,15 +140,16 @@ class Character extends MovableObject {
             if (this.jumpOnEnemy(enemy)) {
                 this.removeEnemy(enemy, index);
                 this.jump();
+                this.dead_chicken.play();
             }
         });
     }
 
 
     jumpOnEnemy(enemy) {
-        return (enemy instanceof Chicken || enemy instanceof SmallChicken) &&  
+        return (enemy instanceof Chicken ||  enemy instanceof SmallChicken /*|| enemy instanceof Endboss*/) &&  
             this.isColliding(enemy) &&      
-            this.isAboveGround() &&         
+            this.isAboveGround() &&     
             this.speedY < 0;                
     }
 
@@ -155,17 +161,27 @@ class Character extends MovableObject {
                     if (!bottle.enemyHit && this.checkBottleCollision(bottle, enemy)) {
                         setTimeout(() => {
                             bottle.enemyHit = true;
-                            this.removeEnemy(enemy, index);
+                            if (enemy instanceof Endboss) {
+                                if (this.world.endbossStatusbar.percentage <= 0) {
+                                    enemy.deadAnimation();
+                                    this.removeEnemy(enemy, index);
+                                } else {
+                                    enemy.endbossHurt();
+                                    enemy.getSmaller();
+                                }
+                            } else {
+                                this.removeEnemy(enemy, index);
+                                this.dead_chicken.play();
+                            }
                         }, 0);
                     }
                 });
             }
         });
     }
-
     
     checkBottleCollision(bottle, enemy) {
-        return bottle.isColliding(enemy) && (enemy instanceof Chicken || enemy instanceof SmallChicken)
+        return bottle.isColliding(enemy) && (enemy instanceof Chicken || enemy instanceof SmallChicken || enemy instanceof Endboss)
     }
     
 
