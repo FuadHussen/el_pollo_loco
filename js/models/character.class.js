@@ -4,7 +4,6 @@ class Character extends MovableObject {
     y = 70;
     speed = 2;
     currentEnemy;
-    // currentChicken = null;
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -37,7 +36,6 @@ class Character extends MovableObject {
     world;
 
     walking_sound = new Audio('audio/running.mp3');
-    bottle_break = new Audio('audio/bottleBreak.mp3');
     dead_chicken = new Audio('audio/deadChicken.mp3');
     jump_sound = new Audio('audio/jump.mp3');
 
@@ -53,13 +51,6 @@ class Character extends MovableObject {
         'img/2_character_pepe/5_dead/D-57.png'
     ];
 
-    offset = {
-        top: 120,
-        left: 40,
-        right: 30,
-        bottom: 20,
-    };
-
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -69,45 +60,49 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.GAME_OVER);
         this.applyGravitiy();
-        this.animate();
+        this.updateGameLogic();
+        this.handleKeyboardInput();
+        this.updateCharacterStatus();
     }
 
 
-    animate() {
-        let i = 0;
-        setInterval(() => {
+    updateGameLogic() {
+        setStoppableInterval(() => {
             this.jumpOnChicken();
             this.bottleOnChicken();
         }, 1000 / 60);
+    }
 
-        setInterval(() => {
+
+    handleKeyboardInput() {
+        setStoppableInterval(() => {
             this.walking_sound.pause();
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 this.otherDirection = false;
                 this.walking_sound.play();
             }
-
             if (this.world.keyboard.LEFT && this.x > 0) {
                 this.moveLeft();
                 this.otherDirection = true;
                 this.walking_sound.play();
             }
-
             if (this.world.keyboard.UP && !this.isAboveGround()) {
                 this.jump();
                 this.jump_sound.play();
             }
-
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
                 this.jump();
                 this.jump_sound.play();
             }
-
             this.world.camera_x = -this.x + 100;
         }, 1000 / 1000);
+    }
 
-        setInterval(() => {
+
+    updateCharacterStatus() {
+        let i = 0;
+        setStoppableInterval(() => {
             if (this.isDead()) {
                 if (i < 7) {
                     this.playAnimation(this.IMAGES_DEAD);
@@ -127,7 +122,7 @@ class Character extends MovableObject {
                 }
             }
         }, 100);
-    } 
+    }
 
 
     jump() {
@@ -141,18 +136,28 @@ class Character extends MovableObject {
                 this.removeEnemy(enemy, index);
                 this.jump();
                 this.dead_chicken.play();
-            }
+            }           
         });
     }
 
 
     jumpOnEnemy(enemy) {
-        return (enemy instanceof Chicken ||  enemy instanceof SmallChicken /*|| enemy instanceof Endboss*/) &&  
-            this.isColliding(enemy) &&      
-            this.isAboveGround() &&     
-            this.speedY < 0;                
+        return (enemy instanceof Chicken || enemy instanceof SmallChicken) &&
+            this.isColliding(enemy) &&
+            this.isAboveGround() &&
+            this.speedY < 0;
     }
 
+
+    hitByEndboss(damage) {
+        this.energy -= damage;
+        if (this.energy < 0) {
+            this.energy = 0;
+        } else {
+            this.lastHit = new Date().getTime();
+        }
+    }
+    
 
     bottleOnChicken() {
         this.world.throwAbleObject.forEach((bottle) => {
@@ -164,9 +169,13 @@ class Character extends MovableObject {
                             if (enemy instanceof Endboss) {
                                 if (this.world.endbossStatusbar.percentage <= 0) {
                                     enemy.deadAnimation();
+                                    this.dead_chicken.play();
                                     this.removeEnemy(enemy, index);
+                                    setStoppableInterval(() => {
+                                        this.world.showEndScreen();
+                                    }, 1000);
                                 } else {
-                                    enemy.endbossHurt();
+                                    enemy.endbossHurt(30);
                                     enemy.getSmaller();
                                 }
                             } else {
@@ -179,11 +188,12 @@ class Character extends MovableObject {
             }
         });
     }
-    
+
+
     checkBottleCollision(bottle, enemy) {
         return bottle.isColliding(enemy) && (enemy instanceof Chicken || enemy instanceof SmallChicken || enemy instanceof Endboss)
     }
-    
+
 
     removeEnemy(enemy, index) {
         enemy.dead = true;

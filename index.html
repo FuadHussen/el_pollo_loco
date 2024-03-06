@@ -1,49 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>El Pollo Loco</title>
-    <link rel="shortcut icon" href="./img/cactus-157994_1280.ico" type="image/x-icon">
-    <script src="./js/models/drawable-object.class.js"></script>
-    <script src="./js/models/movable-object.class.js"></script>
-    <script src="./js/models/character.class.js"></script>
-    <script src="./js/models/chicken.class.js"></script>
-    <script src="./js/models/small.chicken.class.js"></script>
-    <script src="./js/models/cloud.class.js"></script>
-    <script src="./js/models/health-status-bar.class.js"></script>
-    <script src="./js/models/coin-status-bar.class.js"></script>
-    <script src="./js/models/bottle-status-bar.class.js"></script>
-    <script src="./js/models/world.class.js"></script>
-    <script src="./js/models/endboss-status-bar.class.js"></script>
-    <script src="./js/models/endboss-health-element.class.js"></script>
-    <script src="./js/models/enboss.class.js"></script>
-    <script src="./js/models/coin.class.js"></script>
-    <script src="./js/models/bottle.class.js"></script>
-    <script src="./js/models/background.object.class.js"></script>
-    <script src="./js/models/keyboard.class.js"></script>
-    <script src="./js/models/level.class.js"></script>
-    <script src="./js/models/throwable-object.class.js"></script>
-    <script src="./levels/level1.js"></script>
-    <script src="./js/game.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>El Pollo Loco</title>
+  <link rel="shortcut icon" href="./img/cactus-157994_1280.ico" type="image/x-icon">
+  <script src="./js/models/drawable-object.class.js"></script>
+  <script src="./js/models/movable-object.class.js"></script>
+  <script src="./js/models/character.class.js"></script>
+  <script src="./js/models/chicken.class.js"></script>
+  <script src="./js/models/small.chicken.class.js"></script>
+  <script src="./js/models/cloud.class.js"></script>
+  <script src="./js/models/health-status-bar.class.js"></script>
+  <script src="./js/models/coin-status-bar.class.js"></script>
+  <script src="./js/models/bottle-status-bar.class.js"></script>
+  <script src="./js/models/world.class.js"></script>
+  <script src="./js/models/endboss-status-bar.class.js"></script>
+  <script src="./js/models/endboss-health-element.class.js"></script>
+  <script src="./js/models/enboss.class.js"></script>
+  <script src="./js/models/coin.class.js"></script>
+  <script src="./js/models/bottle.class.js"></script>
+  <script src="./js/models/background.object.class.js"></script>
+  <script src="./js/models/keyboard.class.js"></script>
+  <script src="./js/models/level.class.js"></script>
+  <script src="./js/models/throwable-object.class.js"></script>
+  <script src="./levels/level1.js"></script>
+  <script src="./js/game.js"></script>
+  <script src="https://kit.fontawesome.com/731fe859be.js" crossorigin="anonymous"></script>
 </head>
 
 <body onload="init()">
-    <h1>El pollo loco</h1>
-    <div id="fullScreen">
-        <div id="startScreen" class="startScreen">
-          <div class="startDiv">
-            <button id="startGame" class="startGame" onclick="init()">
-                START GAME
-            </button>
-          </div>
-        </div>
+  <h1>El pollo loco</h1>
+    <div id="startScreen" class="startScreen">
+      <div class="startDiv">
+        <button id="startGame" class="startGame" onclick="initLevel()">
+          START GAME
+        </button>
+      </div>
+    </div>
 
     <canvas class="d-none" id="canvas" width="720" height="480">
     </canvas>
-
+    
+    <div class="hud">
+      <div class="leftKeys">
+        <i id="btnLeft" class="fa-solid fa-arrow-left"></i>
+        <i id="btnRight" class="fa-solid fa-arrow-right"></i>
+      </div>
+    <div class="rightKeys">
+      <i id="btnJump" class="fa-solid fa-arrow-up"></i>
+      <i id="btnThrow" class="fa-solid fa-rotate-right"></i>
+    </div>
+  </div>
     <div id="endScreen" class="endScreen">
       <div class="endScreenDiv">
         <button class="endGame" onclick="window.location.reload()">
@@ -52,5 +62,4 @@
       </div>
     </div>
 </body>
-
 </html>

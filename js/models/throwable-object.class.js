@@ -39,13 +39,13 @@ class ThrowAbleObject extends MovableObject {
     throw(direction) {
         this.speedY = 30;
         this.applyGravitiy();
-        let moveInterval = setInterval(() => {
+        let moveInterval = setStoppableInterval(() => {
             this.move(direction);
             if (this.break) {
                 clearInterval(moveInterval);
             }
         }, 75);
-        setInterval(this.rotate.bind(this), 100);
+        setStoppableInterval(this.rotate.bind(this), 100);
     }
 
 
@@ -91,7 +91,7 @@ class ThrowAbleObject extends MovableObject {
 
     playSplashAnimation() {
         let currentIndex = 0;
-        let interval = setInterval(() => {
+        let interval = setStoppableInterval(() => {
             this.playAnimation(this.IMAGE_BOTTLE_SPLASH);
             currentIndex++;
             if (currentIndex >= this.IMAGE_BOTTLE_SPLASH.length) {

@@ -13,7 +13,7 @@ class Coins extends DrawableObject {
     }
 
     animate() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             this.playAnimation(this.COIN);
         }, 1000 / 2);
     }

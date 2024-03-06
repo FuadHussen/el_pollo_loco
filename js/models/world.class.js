@@ -26,7 +26,9 @@ class World {
         this.generateBackgroundObjects();
         this.draw();
         this.setWorld();
-        this.run();
+        if (gameStarted) { // Überprüfen, ob das Spiel gestartet wurde, bevor die Spiellogik ausgeführt wird
+            this.run();
+        }
     }
 
 
@@ -36,7 +38,7 @@ class World {
 
 
     run() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             this.collisionEnemy();
             this.collisionBottle();
             this.collisionCoin();
@@ -63,12 +65,16 @@ class World {
                 if (this.character.isAboveGround(enemy) && !this.character.isHurt()) {
                     enemy.energy = 0;
                 } else {
-                    this.character.hit();
+                    if (enemy instanceof Endboss) {
+                        this.character.hitByEndboss(60); // 60 Leben werden abgezogen, wenn der Charakter vom Endboss getroffen wird
+                    } else {
+                        this.character.hit();
+                    }
                     this.statusBar.setPercentage(this.character.energy);
                 }
             }
         });
-    }
+    }    
 
 
     collisionBottle() {
@@ -218,10 +224,11 @@ class World {
 
 
     showEndScreen() {
-        document.getElementById("endScreen").style.display = "block";
         document.getElementById("canvas").classList.add("d-none");
         document.getElementById("endScreen").classList.remove("d-none");
-        this.character.walking_sound.pause();
+        
+        document.getElementById("endScreen").style.display = "block";
         document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
+        document.querySelector(".hud").style.display = 'none';
     }
 }

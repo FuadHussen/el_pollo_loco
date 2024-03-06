@@ -71,11 +71,15 @@ body {
 
 .endScreen {
     background-size: cover;
-    width: 720px;
-    height: 480px;
     background-position: center;
     display: none;
 }
+
+#endScreen {
+    width: 720px;
+    height: 480px;
+}
+
 
 .endGame:active {
     top: 10px;
@@ -99,7 +103,32 @@ h1 {
     font-size: 64px;
     letter-spacing: 3px;
     text-shadow: 2px 2px 2px rgb(0, 0, 0, .75);
+    margin: 32px 0;
 }
+
+.hud{
+    display: none;
+    justify-content: space-between;
+}
+
+i{
+    width: 32px;
+    font-size: 32px;
+    padding: 8px;
+    margin-top: 8px;
+    border-radius: 32px;
+    background-color: #ffbc02;
+    text-align: center;
+}
+
+.leftKeys i{
+    margin-right: 8px;
+}
+
+.rightKeys i{
+    margin-left: 8px;
+}
+
 
 canvas {
     background-color: black;
@@ -109,6 +138,14 @@ canvas {
     canvas {
         width: 100%;
     }
+
+    #startScreen {
+        width: 100%;
+    }
+
+    #endScreen {
+        width: 100%;
+    }
 }
 
 @media only screen and (max-height: 400px) {
@@ -116,7 +153,21 @@ canvas {
         height: 100vh;
     }
 
+    #startScreen {
+        height: 100vh;
+    }
+
+    #endScreen {
+        height: 100vh;
+    }
+
     h1 {
         display: none;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .hud {
+        display: flex;
     }
 }

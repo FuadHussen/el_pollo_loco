@@ -57,7 +57,7 @@ class Endboss extends MovableObject {
         let animationInterval;
 
         let startAnimation = () => {
-            animationInterval = setInterval(() => {
+            animationInterval = setStoppableInterval(() => {
                 if (this.hadFirstContact) {
 
                     this.playAnimation(this.ENDBOSS_WALKING);
@@ -76,37 +76,42 @@ class Endboss extends MovableObject {
         startAnimation();
 
         // Überprüfen, ob der Endboss die 2050 erreicht hat
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (world.character.x >= 2050) {
                 this.endboss_sound.play();
                 clearInterval(animationInterval);
                 this.hadFirstContact = true;
                 i = 0;
                 startAnimation();
-                setInterval(() => {
+                setStoppableInterval(() => {
                     this.moveLeft(this.speed = 0.5);
                 }, 1000 / 60);
             }
         }, 200);
-        this.endboss_sound.pause();
     }
 
 
-    endbossHurt() {
+    endbossHurt(damage) {
         let animateInterval = setInterval(() => {
             this.playAnimation(this.ENDBOSS_HURT);
             this.currentImageIndexHurt++;
             if (this.currentImageIndexHurt >= this.ENDBOSS_HURT.length) {
                 this.currentImageIndexHurt = 0;
-                world.endbossStatusbar.setPercentage(world.endbossStatusbar.percentage - 20);
+                world.endbossStatusbar.setPercentage(world.endbossStatusbar.percentage - damage); 
+                if (world.endbossStatusbar.percentage <= 0) {
+                    this.deadAnimation();
+                    setInterval(() => {
+                        world.showEndScreen(); 
+                    }, 1000);
+                }
                 clearInterval(animateInterval);
             }
         }, 1000 / 10);
-    }
+    }    
 
 
     deadAnimation() {
-        let animateInterval = setInterval(() => {
+        let animateInterval = setStoppableInterval(() => {
             this.playAnimation(this.ENDBOSS_DEAD);
             this.currentImageIndexHurt++;
             if (this.currentImageIndexHurt >= this.ENDBOSS_DEAD.length) {

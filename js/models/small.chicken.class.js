@@ -36,7 +36,7 @@ class SmallChicken extends MovableObject {
 
     deadChicken() {
         if (this.isDead()) {
-            setInterval(() => {
+            setStoppableInterval(() => {
                 world.removeChicken(this);
             }, 100);
             this.playAnimation(this.IMAGES_DEAD);
