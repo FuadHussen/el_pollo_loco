@@ -4,8 +4,7 @@ let character;
 let keyboard = new Keyboard();
 let intervalIds = [];
 let i = 1;
-
-background_sound = new Audio('audio/backgroundSound.mp3');
+let background_sound;
 
 
 
@@ -23,6 +22,8 @@ function init() {
     });
 
     setStoppableInterval();
+
+    background_sound = new Audio('audio/backgroundSound.mp3');
 }
 
 

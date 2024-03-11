@@ -11,6 +11,7 @@ class World {
     endboss = new Endboss();
     endbossStatusbar = new EndbossStatusBar();
     healthElement = new HealthElement();
+    soundElement = new Sound(650, 75);
     endbossStatusBarVisible = false;
     coins = [];
     bottles = [];
@@ -18,17 +19,45 @@ class World {
     throwAbleObject = [];
     pickedUpBottles = 0;
 
+    bottle_collect = new Audio('audio/collectBottle.mp3');
+    coin_collect = new Audio('audio/collectCoin.mp3');
+
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.canvas.addEventListener('click', (event) => {
+            const rect = this.canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            if (this.isCollidingWithSoundElement(x, y)) {
+                this.soundElement.toggleSound();
+            }
+        });
+
         this.generateBackgroundObjects();
         this.draw();
         this.setWorld();
-        if (gameStarted) { // Überprüfen, ob das Spiel gestartet wurde, bevor die Spiellogik ausgeführt wird
+        if (gameStarted) { 
             this.run();
         }
+    }
+
+
+    isCollidingWithSoundElement(x, y) {
+        const soundX = this.soundElement.x;
+        const soundY = this.soundElement.y;
+        const soundWidth = this.soundElement.width;
+        const soundHeight = this.soundElement.height;
+
+        return (
+            x >= soundX &&
+            x <= soundX + soundWidth &&
+            y >= soundY &&
+            y <= soundY + soundHeight
+        );
     }
 
 
@@ -48,16 +77,16 @@ class World {
 
 
     checkThrowObjects() {
-        if (this.keyboard.D && this.pickedUpBottles > 0) { 
+        if (this.keyboard.D && this.pickedUpBottles > 0) {
             let bottle = new ThrowAbleObject(this.character.x + 100, this.character.y + 100);
-            bottle.world = this; 
+            bottle.world = this;
             this.throwAbleObject.push(bottle);
             this.pickedUpBottles--;
-    
+
             this.bottle.setPercentage(this.bottle.percentage - 20); // Reduziere die Flaschenanzeige um 20 Prozent
         }
     }
-    
+
 
     collisionEnemy() {
         this.level.enemies.forEach(enemy => {
@@ -74,17 +103,18 @@ class World {
                 }
             }
         });
-    }    
+    }
 
 
     collisionBottle() {
         for (let i = 0; i < this.bottles.length; i++) {
             let bottle = this.bottles[i];
             if (this.character.isColliding(bottle) && this.bottle.percentage < 100) {
-                this.bottle.setPercentage(this.bottle.percentage + 20); 
+                this.bottle.setPercentage(this.bottle.percentage + 20);
                 this.pickedUpBottles++;
+                this.bottle_collect.play();
                 this.bottles.splice(i, 1);
-                i--; 
+                i--;
             }
         }
     }
@@ -97,6 +127,7 @@ class World {
                 this.coin.setPercentage(this.coin.percentage + 10);
                 if (this.coin.percentage <= 100) {
                     this.coins.splice(i, 1);
+                    this.coin_collect.play();
                     i--;
                 }
             }
@@ -124,6 +155,7 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.bottle);
         this.addToMap(this.coin);
+        this.addToMap(this.soundElement);
 
         //wenn x achse erreicht wird 
         if (this.character.x >= 2050) {
@@ -138,7 +170,7 @@ class World {
             this.addToMap(this.healthElement);
         }
 
-       this.ctx.translate(this.camera_x, 0); // camera forwards
+        this.ctx.translate(this.camera_x, 0); // camera forwards
 
         this.addObjectsToMap(this.level.clouds);
         this.addToMap(this.character);
@@ -148,7 +180,7 @@ class World {
         this.addObjectsToMap(this.level.smallEnemies);
         this.addObjectsToMap(this.throwAbleObject);
 
-        
+
 
         this.ctx.translate(-this.camera_x, 0);
 
@@ -226,7 +258,7 @@ class World {
     showEndScreen() {
         document.getElementById("canvas").classList.add("d-none");
         document.getElementById("endScreen").classList.remove("d-none");
-        
+
         document.getElementById("endScreen").style.display = "block";
         document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
         document.querySelector(".hud").style.display = 'none';

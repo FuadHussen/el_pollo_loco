@@ -38,6 +38,7 @@ class Character extends MovableObject {
     walking_sound = new Audio('audio/running.mp3');
     dead_chicken = new Audio('audio/deadChicken.mp3');
     jump_sound = new Audio('audio/jump.mp3');
+    hurt_sound = new Audio('audio/hurt.mp3');
 
     isWalking = false;
 
@@ -114,6 +115,7 @@ class Character extends MovableObject {
                 i++;
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
+                this.hurt_sound.play();
             } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
             } else {

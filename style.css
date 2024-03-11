@@ -106,12 +106,12 @@ h1 {
     margin: 32px 0;
 }
 
-.hud{
+.hud {
     display: none;
     justify-content: space-between;
 }
 
-i{
+i {
     width: 32px;
     font-size: 32px;
     padding: 8px;
@@ -121,17 +121,32 @@ i{
     text-align: center;
 }
 
-.leftKeys i{
+.leftKeys i {
     margin-right: 8px;
 }
 
-.rightKeys i{
+.rightKeys i {
     margin-left: 8px;
 }
 
 
 canvas {
-    background-color: black;
+    border-radius: 16px;
+}
+
+#canvas-controls {
+    position: absolute;
+    top: 15%;
+    right: 20%;
+}
+
+#canvas-controls i {
+    font-size: 24px;
+    margin-left: 10px;
+}
+
+.sound-image {
+    border-radius: 99px;
 }
 
 @media only screen and (max-width: 760px) {
