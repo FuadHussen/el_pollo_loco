@@ -53,41 +53,41 @@ class Endboss extends MovableObject {
 
 
     animate() {
-        let i = 0;
         let animationInterval;
 
         let startAnimation = () => {
-            animationInterval = setStoppableInterval(() => {
-                if (this.hadFirstContact) {
-
-                    this.playAnimation(this.ENDBOSS_WALKING);
-                } else {
-
-                    if (i < 8) {
-                        this.playAnimation(this.ENDBOSS_WALKING);
-                    } else {
-                        this.playAnimation(this.IMAGES_WALKING);
-                    }
-                    i++;
-                }
-            }, 200);
+            animationInterval = setStoppableInterval(() => this.endbossAnimation(), 200);
         };
 
         startAnimation();
 
         // Überprüfen, ob der Endboss die 2050 erreicht hat
-        setStoppableInterval(() => {
-            if (world.character.x >= 2050) {
-                this.endboss_sound.play();
-                clearInterval(animationInterval);
-                this.hadFirstContact = true;
-                i = 0;
-                startAnimation();
-                setStoppableInterval(() => {
-                    this.moveLeft(this.speed = 0.5);
-                }, 1000 / 60);
+        setStoppableInterval(() => this.characterOnX(), 200);
+    }
+
+
+    endbossAnimation() {
+        if (this.hadFirstContact) {
+            this.playAnimation(this.ENDBOSS_WALKING);
+        } else {
+            if (i < 8) {
+                this.playAnimation(this.ENDBOSS_WALKING);
+            } else {
+                this.playAnimation(this.IMAGES_WALKING);
             }
-        }, 200);
+            i++;
+        }
+    }
+
+
+    characterOnX(animationInterval) {
+        if (world.character.x >= 2050) {
+            this.endboss_sound.play();
+            clearInterval(animationInterval);
+            this.hadFirstContact = true;
+            i = 0;
+            setStoppableInterval(() => this.moveLeft(this.speed = 0.5), 1000 / 60);
+        }
     }
 
 
@@ -96,18 +96,26 @@ class Endboss extends MovableObject {
             this.playAnimation(this.ENDBOSS_HURT);
             this.currentImageIndexHurt++;
             if (this.currentImageIndexHurt >= this.ENDBOSS_HURT.length) {
-                this.currentImageIndexHurt = 0;
-                world.endbossStatusbar.setPercentage(world.endbossStatusbar.percentage - damage); 
-                if (world.endbossStatusbar.percentage <= 0) {
-                    this.deadAnimation();
-                    setInterval(() => {
-                        world.showEndScreen(); 
-                    }, 1000);
-                }
+                this.endbossStatus(damage);
                 clearInterval(animateInterval);
             }
         }, 1000 / 10);
-    }    
+    }
+
+
+    endbossStatus(damage) {
+        this.currentImageIndexHurt = 0;
+        world.endbossStatusbar.setPercentage(world.endbossStatusbar.percentage - damage);
+        this.endbossDead();
+    }
+
+
+    endbossDead() {
+        if (world.endbossStatusbar.percentage <= 0) {
+            this.deadAnimation();
+            setInterval(() => world.showEndScreen(), 1000);
+        }
+    }
 
 
     deadAnimation() {

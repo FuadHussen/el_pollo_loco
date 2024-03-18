@@ -26,7 +26,16 @@ body {
 
 .startDiv {
     display: flex;
+    align-items: center;
     justify-content: center;
+    position: relative;
+}
+
+.info {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    cursor: pointer;
 }
 
 .startGame {
@@ -145,9 +154,28 @@ canvas {
     margin-left: 10px;
 }
 
-.sound-image {
-    border-radius: 99px;
+.infoBox {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 10px;
+    border: 1px solid #000000;
+    border-radius: 8px;
+    background-color: chocolate;
+    font-size: 42px;
 }
+
+.infoItem {
+    margin-bottom: 5px;
+}
+
+.infoItem i {
+    margin-right: 5px;
+}
+
 
 @media only screen and (max-width: 760px) {
     canvas {

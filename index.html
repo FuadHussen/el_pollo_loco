@@ -29,6 +29,7 @@
   <script src="./levels/level1.js"></script>
   <script src="./js/game.js"></script>
   <script src="./js/models/sound.class.js"></script>
+  <script src="./js/models/restart.class.js"></script>
   <script src="https://kit.fontawesome.com/731fe859be.js" crossorigin="anonymous"></script>
 </head>
 
@@ -36,12 +37,36 @@
   <h1>El pollo loco</h1>
   <div id="startScreen" class="startScreen">
     <div class="startDiv">
+      <div class="info">
+        <i onclick="openInfoBox()" class="fa-solid fa-circle-info"></i>
+      </div>
       <button id="startGame" class="startGame" onclick="initLevel()">
         START GAME
       </button>
     </div>
   </div>
+
+
+  <div id="infoBox" class="infoBox">
+    <div class="infoItem">
+      <i class="fa-solid fa-arrow-up"></i>
+      <span>Springen</span>
+    </div>
+    <div class="infoItem">
+      <i class="fa-solid fa-arrow-left"></i>
+      <span>Links bewegen</span>
+    </div>
+    <div class="infoItem">
+      <i class="fa-solid fa-arrow-right"></i>
+      <span>Rechts bewegen</span>
+    </div>
+    <div class="infoItem">
+      <i class="fa-solid fa-d"></i>
+      <span>Flasche werfen</span>
+    </div>
+  </div>
   
+
   <canvas class="d-none" id="canvas" width="720" height="480">
   </canvas>
 
@@ -53,7 +78,7 @@
     </div>
     <div class="rightKeys">
       <i id="btnJump" class="fa-solid fa-arrow-up"></i>
-      <i id="btnThrow" class="fa-solid fa-rotate-right"></i>
+      <i id="btnThrow" class="fa-solid fa-d"></i>
     </div>
   </div>
   <div id="endScreen" class="endScreen">

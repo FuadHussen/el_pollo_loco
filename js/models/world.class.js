@@ -12,6 +12,7 @@ class World {
     endbossStatusbar = new EndbossStatusBar();
     healthElement = new HealthElement();
     soundElement = new Sound(650, 75);
+    restartElement = new Restart(600, 75);
     endbossStatusBarVisible = false;
     coins = [];
     bottles = [];
@@ -27,6 +28,12 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.setupClickEvent();
+        this.setupWorld();
+    }
+
+
+    setupClickEvent() {
         this.canvas.addEventListener('click', (event) => {
             const rect = this.canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
@@ -36,11 +43,14 @@ class World {
                 this.soundElement.toggleSound();
             }
         });
+    }
 
+
+    setupWorld() {
         this.generateBackgroundObjects();
         this.draw();
         this.setWorld();
-        if (gameStarted) { 
+        if (gameStarted) {
             this.run();
         }
     }
@@ -83,7 +93,7 @@ class World {
             this.throwAbleObject.push(bottle);
             this.pickedUpBottles--;
 
-            this.bottle.setPercentage(this.bottle.percentage - 20); // Reduziere die Flaschenanzeige um 20 Prozent
+            this.bottle.setPercentage(this.bottle.percentage - 20);
         }
     }
 
@@ -95,7 +105,7 @@ class World {
                     enemy.energy = 0;
                 } else {
                     if (enemy instanceof Endboss) {
-                        this.character.hitByEndboss(60); // 60 Leben werden abgezogen, wenn der Charakter vom Endboss getroffen wird
+                        this.character.hitByEndboss(60);
                     } else {
                         this.character.hit();
                     }
@@ -149,13 +159,13 @@ class World {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
 
-
         this.ctx.translate(-this.camera_x, 0); // camera back
         // -------- Space for fixed objectes ---------
         this.addToMap(this.statusBar);
         this.addToMap(this.bottle);
         this.addToMap(this.coin);
         this.addToMap(this.soundElement);
+        this.addToMap(this.restartElement);
 
         //wenn x achse erreicht wird 
         if (this.character.x >= 2050) {
@@ -232,25 +242,39 @@ class World {
 
         for (let i = -this.totalBackgrounds; i < this.totalBackgrounds; i++) {
             let setOffset = i * this.backgroundWidth * this.backgroundsPerSet;
-
-            for (let j = 0; j < this.backgroundsPerSet; j++) {
-                const xPosition = setOffset + this.backgroundWidth * j;
-
-                this.backgroundObjects.push(
-                    new BackgroundObject('img/5_background/layers/air.png', xPosition),
-                    new BackgroundObject(`img/5_background/layers/3_third_layer/${j % 2 + 1}.png`, xPosition),
-                    new BackgroundObject(`img/5_background/layers/2_second_layer/${j % 2 + 1}.png`, xPosition),
-                    new BackgroundObject(`img/5_background/layers/1_first_layer/${j % 2 + 1}.png`, xPosition)
-                );
-            }
+            this.generateBackground(setOffset);
         }
-        for (let i = 0; i < 10; i++) {
-            let coin = new Coins();
-            this.coins.push(coin);
+        this.generateBottle();
+        this.generateCoin();
+    }
+
+
+    generateBackground() {
+        for (let j = 0; j < this.backgroundsPerSet; j++) {
+            const xPosition = setOffset + this.backgroundWidth * j;
+
+            this.backgroundObjects.push(
+                new BackgroundObject('img/5_background/layers/air.png', xPosition),
+                new BackgroundObject(`img/5_background/layers/3_third_layer/${j % 2 + 1}.png`, xPosition),
+                new BackgroundObject(`img/5_background/layers/2_second_layer/${j % 2 + 1}.png`, xPosition),
+                new BackgroundObject(`img/5_background/layers/1_first_layer/${j % 2 + 1}.png`, xPosition)
+            );
         }
+    }
+
+
+    generateBottle() {
         for (let i = 0; i < 20; i++) {
             let bottle = new Bottles();
             this.bottles.push(bottle);
+        }
+    }
+
+
+    generateCoin() {
+        for (let i = 0; i < 9; i++) {
+            let coin = new Coins();
+            this.coins.push(coin);
         }
     }
 

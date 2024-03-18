@@ -7,9 +7,7 @@ class Sound extends DrawableObject {
 
     constructor(x, y) {
         super();
-        this.loadImage(this.IMAGES_SOUND[0], () => {
-            this.style.borderRadius = "90px";
-        });
+        this.loadImage(this.IMAGES_SOUND[0]);
         this.x = x;
         this.y = y;
         this.width = 30;

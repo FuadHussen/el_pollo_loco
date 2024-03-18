@@ -98,12 +98,12 @@ class ThrowAbleObject extends MovableObject {
                 clearInterval(interval);
                 setTimeout(() => {
                     this.removeSelf();
-                }, 50); 
+                }, 50);
             }
-        }, 50); 
+        }, 50);
     }
 
-    
+
     removeSelf() {
         let index = this.world.throwAbleObject.indexOf(this);
         if (index !== -1) {

@@ -4,7 +4,7 @@ let character;
 let keyboard = new Keyboard();
 let intervalIds = [];
 let i = 1;
-let background_sound;
+let background_sound = new Audio('audio/backgroundSound.mp3');
 
 
 
@@ -22,10 +22,27 @@ function init() {
     });
 
     setStoppableInterval();
-
-    background_sound = new Audio('audio/backgroundSound.mp3');
+    closeInfoBox();
+    checkOrientation();
 }
 
+
+function openInfoBox() {
+    let infoBox = document.getElementById("infoBox");
+    infoBox.style.display = "block";
+}
+
+
+function closeInfoBox() {
+    document.addEventListener('click', function(event) {
+        let infoBox = document.getElementById('infoBox');
+        let infoIcon = document.querySelector('.fa-circle-info');
+    
+        if (event.target !== infoBox && event.target !== infoIcon && !infoBox.contains(event.target)) {
+            infoBox.style.display = 'none';
+        }
+    });    
+}
 
 
 function setStoppableInterval(fn, time) {
@@ -37,6 +54,16 @@ function setStoppableInterval(fn, time) {
 function stopGame() {
     intervalIds.forEach(clearInterval);
 }
+
+
+function checkOrientation() {
+    if (window.orientation === 0) {
+        alert("Bitte drehen Sie Ihr Gerät ins Querformat, um zu spielen.");
+    }
+}
+
+window.addEventListener("load", checkOrientation);
+window.addEventListener("orientationchange", checkOrientation);
 
 
 window.addEventListener("keydown", (e) => {
