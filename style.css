@@ -176,6 +176,28 @@ canvas {
     margin-right: 5px;
 }
 
+.infoUser{
+    color: black;
+    text-decoration: none;
+}
+
+.infoUser:hover{
+    text-decoration: underline;
+    color: rgb(0, 0, 0, .75);
+}
+
+.impressum{
+    margin: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.impressum p {
+    font-size: 24px;
+}
+
 
 @media only screen and (max-width: 760px) {
     canvas {
