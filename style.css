@@ -10,6 +10,8 @@ body {
     align-items: center;
     background-image: url('./img/desert-5385998_1280.png');
     background-position: center;
+    margin: 0;
+    padding: 0;
 }
 
 .startScreen {
@@ -117,6 +119,7 @@ h1 {
 
 .hud {
     display: none;
+    width: 100%;
     justify-content: space-between;
 }
 
@@ -138,9 +141,12 @@ i {
     margin-left: 8px;
 }
 
-
 canvas {
     border-radius: 16px;
+}
+
+.canvas-container {
+    position: relative;
 }
 
 #canvas-controls {
@@ -176,17 +182,17 @@ canvas {
     margin-right: 5px;
 }
 
-.infoUser{
+.infoUser {
     color: black;
     text-decoration: none;
 }
 
-.infoUser:hover{
+.infoUser:hover {
     text-decoration: underline;
     color: rgb(0, 0, 0, .75);
 }
 
-.impressum{
+.impressum {
     margin: 24px;
     display: flex;
     flex-direction: column;
@@ -234,5 +240,14 @@ canvas {
 @media only screen and (max-width: 900px) {
     .hud {
         display: flex;
+        position: absolute;
+        top: 83%;
+        left: 0;
+    }
+}
+
+@media only screen and (min-width: 901px) {
+    .hud {
+        display: none!important; 
     }
 }

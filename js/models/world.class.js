@@ -29,6 +29,7 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.setupClickEvent();
+        this.setupRestartEvent();
         this.setupWorld();
     }
 
@@ -38,9 +39,40 @@ class World {
             const rect = this.canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
-
+    
             if (this.isCollidingWithSoundElement(x, y)) {
                 this.soundElement.toggleSound();
+    
+                // Verhindern, dass das Ereignis weitergeleitet wird
+                event.stopPropagation();
+            }
+        });
+        
+        document.addEventListener('click', (event) => {
+            if (!this.isCollidingWithSoundElement(event.clientX, event.clientY)) {
+                this.soundElement.toggleSound();
+            }
+        });
+    }
+
+
+    setupRestartEvent() {
+        this.canvas.addEventListener('click', (event) => {
+            const rect = this.canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+    
+            if (this.isCollidingWithRestartElement(x, y)) {
+                this.restartElement.toggleRestart();
+    
+                // Verhindern, dass das Ereignis weitergeleitet wird
+                event.stopPropagation();
+            }
+        });
+        
+        document.addEventListener('click', (event) => {
+            if (!this.isCollidingWithRestartElement(event.clientX, event.clientY)) {
+                this.restartElement.toggleRestart();
             }
         });
     }
@@ -71,6 +103,21 @@ class World {
     }
 
 
+    isCollidingWithRestartElement(x, y) {
+        const soundX = this.restartElement.x;
+        const soundY = this.restartElement.y;
+        const soundWidth = this.restartElement.width;
+        const soundHeight = this.restartElement.height;
+
+        return (
+            x >= soundX &&
+            x <= soundX + soundWidth &&
+            y >= soundY &&
+            y <= soundY + soundHeight
+        );
+    }
+
+
     setWorld() {
         this.character.world = this;
     }
@@ -88,14 +135,16 @@ class World {
 
     checkThrowObjects() {
         if (this.keyboard.D && this.pickedUpBottles > 0) {
-            let bottle = new ThrowAbleObject(this.character.x + 100, this.character.y + 100);
+            let direction = this.character.otherDirection ? 'left' : 'right'; // Richtung des Charakters
+            let bottle = new ThrowAbleObject(this.character.x + 100, this.character.y + 100, direction);
             bottle.world = this;
             this.throwAbleObject.push(bottle);
             this.pickedUpBottles--;
-
+    
             this.bottle.setPercentage(this.bottle.percentage - 20);
         }
     }
+    
 
 
     collisionEnemy() {

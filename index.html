@@ -72,20 +72,21 @@
   </div>
   
 
-  <canvas class="d-none" id="canvas" width="720" height="480">
-  </canvas>
-
-
-  <div class="hud">
-    <div class="leftKeys">
-      <i id="btnLeft" class="fa-solid fa-arrow-left"></i>
-      <i id="btnRight" class="fa-solid fa-arrow-right"></i>
+  <div class="canvas-container">
+    <canvas class="d-none" id="canvas" width="720" height="480"></canvas>
+    <div class="hud">
+        <div class="leftKeys">
+            <i id="btnLeft" class="fa-solid fa-arrow-left"></i>
+            <i id="btnRight" class="fa-solid fa-arrow-right"></i>
+        </div>
+        <div class="rightKeys">
+            <i id="btnJump" class="fa-solid fa-arrow-up"></i>
+            <i id="btnThrow" class="fa-solid fa-d"></i>
+        </div>
     </div>
-    <div class="rightKeys">
-      <i id="btnJump" class="fa-solid fa-arrow-up"></i>
-      <i id="btnThrow" class="fa-solid fa-d"></i>
-    </div>
-  </div>
+</div>
+
+  
   <div id="endScreen" class="endScreen">
     <div class="endScreenDiv">
       <button class="endGame" onclick="window.location.reload()">

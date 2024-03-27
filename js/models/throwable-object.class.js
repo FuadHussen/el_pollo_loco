@@ -51,7 +51,7 @@ class ThrowAbleObject extends MovableObject {
 
     move(direction) {
         if (!this.break) {
-            if (direction) {
+            if (direction === 'left') {
                 this.x -= this.speedX;
             } else {
                 this.x += this.speedX;

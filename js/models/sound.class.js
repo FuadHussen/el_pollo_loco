@@ -1,7 +1,7 @@
 class Sound extends DrawableObject {
     IMAGES_SOUND = ['img/sound-modified.png'];
     IMAGES_SOUND_MUTE = ['img/mute-modified.png']
-    isMuted = false;
+    isMuted = true;
 
 
 

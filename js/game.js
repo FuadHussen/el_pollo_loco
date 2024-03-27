@@ -11,6 +11,10 @@ let background_sound = new Audio('audio/backgroundSound.mp3');
 function init() {
     canvas = document.getElementById("canvas");
 
+    if (!document.getElementById("startScreen").classList.contains("d-none")) {
+        document.querySelector('.hud').style.display = 'none';
+    } 
+
     document.getElementById("startGame").addEventListener("click", function () {
         document.getElementById("startScreen").classList.add("d-none");
         document.getElementById("canvas").classList.remove("d-none");
@@ -19,6 +23,7 @@ function init() {
         gameStarted = true; 
 
         world = new World(canvas, keyboard);
+        document.querySelector('.hud').style.display = 'flex';
     });
 
     setStoppableInterval();

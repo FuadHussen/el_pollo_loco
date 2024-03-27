@@ -67,6 +67,11 @@ class Endboss extends MovableObject {
 
 
     endbossAnimation() {
+        if (this.x <= -300) {
+            world.showEndScreen();
+            return;
+        }
+    
         if (this.hadFirstContact) {
             this.playAnimation(this.ENDBOSS_WALKING);
         } else {
@@ -115,6 +120,9 @@ class Endboss extends MovableObject {
             this.deadAnimation();
             setInterval(() => world.showEndScreen(), 1000);
         }
+        if (this.x < 125) {
+            setInterval(() => world.showEndScreen(), 1000);
+        }
     }
 
 
@@ -135,10 +143,6 @@ class Endboss extends MovableObject {
             this.width = 250;
             this.height = 250;
             this.y = 200;
-        } else if (world.endbossStatusbar.percentage > 40) {
-            this.width = 100;
-            this.height = 100;
-            this.y = 350;
         }
     }
 }
