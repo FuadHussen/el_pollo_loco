@@ -13,14 +13,14 @@ function init() {
 
     if (!document.getElementById("startScreen").classList.contains("d-none")) {
         document.querySelector('.hud').style.display = 'none';
-    } 
+    }
 
     document.getElementById("startGame").addEventListener("click", function () {
         document.getElementById("startScreen").classList.add("d-none");
         document.getElementById("canvas").classList.remove("d-none");
         background_sound.play();
-        initLevel(); 
-        gameStarted = true; 
+        initLevel();
+        gameStarted = true;
 
         world = new World(canvas, keyboard);
         document.querySelector('.hud').style.display = 'flex';
@@ -28,7 +28,7 @@ function init() {
 
     setStoppableInterval();
     closeInfoBox();
-    checkOrientation();
+    mobileAlert();
 }
 
 
@@ -39,14 +39,14 @@ function openInfoBox() {
 
 
 function closeInfoBox() {
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
         let infoBox = document.getElementById('infoBox');
         let infoIcon = document.querySelector('.fa-circle-info');
-    
+
         if (event.target !== infoBox && event.target !== infoIcon && !infoBox.contains(event.target)) {
             infoBox.style.display = 'none';
         }
-    });    
+    });
 }
 
 
@@ -56,19 +56,31 @@ function setStoppableInterval(fn, time) {
 }
 
 
-function stopGame() {
-    intervalIds.forEach(clearInterval);
-}
+function mobileAlert() {
+    let mobileAlert = document.getElementById('mobileAlert');
+    let startScreen = document.getElementById('startScreen');
 
-
-function checkOrientation() {
-    if (window.orientation === 0) {
-        alert("Bitte drehen Sie Ihr Gerät ins Querformat, um zu spielen.");
+    if (window.matchMedia('(max-width: 700px)').matches) {
+        mobileAlert.classList.remove('d-none');
+        startScreen.classList.add('d-none');
+        document.querySelector('h1').classList.add('d-none');
+        document.querySelector('.hud').classList.add('d-none');
+    } else {
+        mobileAlert.classList.add('d-none');
+        startScreen.classList.remove('d-none');
+        document.querySelector('h1').classList.remove('d-none');
+        document.querySelector('.hud').classList.remove('d-none');
     }
 }
 
-window.addEventListener("load", checkOrientation);
-window.addEventListener("orientationchange", checkOrientation);
+window.addEventListener('load', mobileAlert); // Beim Laden der Seite überprüfen
+window.addEventListener('resize', mobileAlert); // Bei Änderungen der Bildschirmgröße überprüfen
+
+
+
+function stopGame() {
+    intervalIds.forEach(clearInterval);
+}
 
 
 window.addEventListener("keydown", (e) => {
@@ -131,25 +143,25 @@ window.addEventListener("touchstart", (e) => {
     const rectJump = btnJump.getBoundingClientRect();
     const rectThrow = btnThrow.getBoundingClientRect();
 
-    if (touchX >= rectRight.left && touchX <= rectRight.right && 
+    if (touchX >= rectRight.left && touchX <= rectRight.right &&
         touchY >= rectRight.top && touchY <= rectRight.bottom) {
         e.preventDefault();
         keyboard.RIGHT = true;
     }
 
-    if (touchX >= rectJump.left && touchX <= rectJump.right && 
+    if (touchX >= rectJump.left && touchX <= rectJump.right &&
         touchY >= rectJump.top && touchY <= rectJump.bottom) {
         e.preventDefault();
         keyboard.UP = true;
     }
 
-    if (touchX >= rectLeft.left && touchX <= rectLeft.right && 
+    if (touchX >= rectLeft.left && touchX <= rectLeft.right &&
         touchY >= rectLeft.top && touchY <= rectLeft.bottom) {
         e.preventDefault();
         keyboard.LEFT = true;
     }
 
-    if (touchX >= rectThrow.left && touchX <= rectThrow.right && 
+    if (touchX >= rectThrow.left && touchX <= rectThrow.right &&
         touchY >= rectThrow.top && touchY <= rectThrow.bottom) {
         e.preventDefault();
         keyboard.D = true;
