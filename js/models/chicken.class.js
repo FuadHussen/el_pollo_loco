@@ -20,6 +20,10 @@ class Chicken extends MovableObject {
     }
 
 
+    /**
+     * Animates the chicken object by moving it left and playing the walking animation.
+     * If the chicken is dead it plays the dead animation instead.
+     */
     animate() {
         let walkingInterval = setStoppableInterval(() => {
             if (!this.dead) {
@@ -33,6 +37,9 @@ class Chicken extends MovableObject {
     }
 
 
+    /**
+     * Checks if the chicken is dead and initiates the removal process if so.
+     */
     deadChicken() {
         if (this.isDead()) {
             setStoppableInterval(() => {

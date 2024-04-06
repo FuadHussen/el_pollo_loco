@@ -52,6 +52,9 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Animates the end boss movement.
+     */
     animate() {
         let animationInterval;
 
@@ -66,6 +69,9 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Animates the end boss movement and actions.
+     */
     endbossAnimation() {
         if (this.x <= -300) {
             world.showEndScreen();
@@ -85,6 +91,9 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Checks if the character has reached the X position to trigger end boss actions.
+     */
     characterOnX(animationInterval) {
         if (world.character.x >= 2050) {
             this.endboss_sound.play();
@@ -96,6 +105,10 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Damages the end boss and triggers hurt animation.
+     * @param {number} damage - The amount of damage to apply.
+     */
     endbossHurt(damage) {
         let animateInterval = setInterval(() => {
             this.playAnimation(this.ENDBOSS_HURT);
@@ -108,6 +121,10 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Updates the end boss status after being hurt.
+     * @param {number} damage - The amount of damage taken.
+     */
     endbossStatus(damage) {
         this.currentImageIndexHurt = 0;
         world.endbossStatusbar.setPercentage(world.endbossStatusbar.percentage - damage);
@@ -115,6 +132,9 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Triggers the dead animation of the end boss.
+     */
     endbossDead() {
         if (world.endbossStatusbar.percentage <= 0) {
             this.deadAnimation();
@@ -126,6 +146,9 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Plays the dead animation of the end boss.
+     */
     deadAnimation() {
         let animateInterval = setStoppableInterval(() => {
             this.playAnimation(this.ENDBOSS_DEAD);
@@ -138,6 +161,9 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Shrinks the end boss when its status is above a certain threshold.
+     */
     getSmaller() {
         if (world.endbossStatusbar.percentage > 90) {
             this.width = 250;

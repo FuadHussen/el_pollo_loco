@@ -50,12 +50,20 @@ function closeInfoBox() {
 }
 
 
+/**
+ * Sets a stoppable interval for a function.
+ * @param {Function} fn - The function to be executed.
+ * @param {number} time - The interval time in milliseconds.
+ */
 function setStoppableInterval(fn, time) {
     let id = setInterval(fn, time);
     intervalIds.push(id);
 }
 
 
+/**
+ * Displays a mobile alert if the screen width is below 700px.
+ */
 function mobileAlert() {
     let mobileAlert = document.getElementById('mobileAlert');
     let startScreen = document.getElementById('startScreen');
@@ -78,11 +86,19 @@ window.addEventListener('resize', mobileAlert); // Bei Änderungen der Bildschir
 
 
 
+
+/**
+ * Stops the game by clearing all intervals.
+ */
 function stopGame() {
     intervalIds.forEach(clearInterval);
 }
 
 
+/**
+ * Event listener for keydown events to handle keyboard inputs.
+ * @param {Event} e - The keydown event object.
+ */
 window.addEventListener("keydown", (e) => {
     if (e.keyCode == 39) {
         keyboard.RIGHT = true;
@@ -106,6 +122,10 @@ window.addEventListener("keydown", (e) => {
 })
 
 
+/**
+ * Event listener for keyup events to handle keyboard inputs.
+ * @param {Event} e - The keyup event object.
+ */
 window.addEventListener("keyup", (e) => {
     if (e.keyCode == 39) {
         keyboard.RIGHT = false;
@@ -129,6 +149,10 @@ window.addEventListener("keyup", (e) => {
 })
 
 
+/**
+ * Event listener for touchstart events to handle touch inputs.
+ * @param {Event} e - The touchstart event object.
+ */
 window.addEventListener("touchstart", (e) => {
     const touchX = e.touches[0].clientX;
     const touchY = e.touches[0].clientY;
@@ -169,6 +193,10 @@ window.addEventListener("touchstart", (e) => {
 }, { passive: false });
 
 
+/**
+ * Event listener for touchend events to handle touch inputs.
+ * @param {Event} e - The touchend event object.
+ */
 window.addEventListener("touchend", (e) => {
     keyboard.RIGHT = false;
     keyboard.UP = false;

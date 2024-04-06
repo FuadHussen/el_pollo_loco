@@ -12,12 +12,21 @@ class Coins extends DrawableObject {
         this.animate();
     }
 
+
+    /**
+     * Animates the coin object by cycling through its images.
+     */
     animate() {
         setStoppableInterval(() => {
             this.playAnimation(this.COIN);
         }, 1000 / 2);
     }
 
+
+    /**
+     * Plays the animation by updating the current image to display.
+     * @param {Array} images - Array of paths to images representing the animation frames.
+     */
     playAnimation(images) {
         let i = this.currentImage % images.length;
         let path = images[i];

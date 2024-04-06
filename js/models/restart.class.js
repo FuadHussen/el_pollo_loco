@@ -12,6 +12,11 @@ class Restart extends DrawableObject {
         this.height = 30;
     }
 
+
+    /**
+     * Toggles the restart action. If the game is restarted, it reloads the window.
+     * If the game is already restarted, it plays the background sound and cancels the restart.
+     */
     toggleRestart() {
         if (this.isRestarted) {
             background_sound.play();

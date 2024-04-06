@@ -14,6 +14,12 @@ class Sound extends DrawableObject {
         this.height = 30;
     }
 
+
+    /**
+     * Toggles the background sound on/off.
+     * If sound is muted, it plays the background sound and updates the sound icon.
+     * If sound is playing, it pauses the background sound and updates the sound icon.
+     */
     toggleSound() {
         if (this.isMuted) {
             background_sound.play();

@@ -34,6 +34,9 @@ class World {
     }
 
 
+    /**
+     * Sets up the click event listeners for sound and restart elements.
+     */
     setupClickEvent() {
         this.canvas.addEventListener('click', (event) => {
             const rect = this.canvas.getBoundingClientRect();
@@ -56,6 +59,9 @@ class World {
     }
 
 
+    /**
+     * Sets up the click event listeners for the restart element.
+     */
     setupRestartEvent() {
         this.canvas.addEventListener('click', (event) => {
             const rect = this.canvas.getBoundingClientRect();
@@ -78,6 +84,9 @@ class World {
     }
 
 
+    /**
+     * Sets up the game world including background objects, characters, enemies, and interactive elements.
+     */
     setupWorld() {
         this.generateBackgroundObjects();
         this.draw();
@@ -88,6 +97,12 @@ class World {
     }
 
 
+    /**
+     * Checks if the given coordinates are within the sound element's area.
+     * @param {number} x - The x-coordinate of the point.
+     * @param {number} y - The y-coordinate of the point.
+     * @returns {boolean} - True if the coordinates are within the sound element's area, otherwise false.
+     */
     isCollidingWithSoundElement(x, y) {
         const soundX = this.soundElement.x;
         const soundY = this.soundElement.y;
@@ -103,6 +118,12 @@ class World {
     }
 
 
+    /**
+     * Checks if the given coordinates are within the restart element's area.
+     * @param {number} x - The x-coordinate of the point.
+     * @param {number} y - The y-coordinate of the point.
+     * @returns {boolean} - True if the coordinates are within the restart element's area, otherwise false.
+     */
     isCollidingWithRestartElement(x, y) {
         const soundX = this.restartElement.x;
         const soundY = this.restartElement.y;
@@ -118,11 +139,17 @@ class World {
     }
 
 
+    /**
+     * Sets the world for the character.
+     */
     setWorld() {
         this.character.world = this;
     }
 
 
+    /*
+     * Runs the game loop.
+     */
     run() {
         setStoppableInterval(() => {
             this.collisionEnemy();
@@ -133,6 +160,9 @@ class World {
     }
 
 
+    /**
+     * Checks if the character can throw objects and handles the throwing action.
+     */
     checkThrowObjects() {
         if (this.keyboard.D && this.pickedUpBottles > 0) {
             let direction = this.character.otherDirection ? 'left' : 'right'; // Richtung des Charakters
@@ -146,7 +176,9 @@ class World {
     }
     
 
-
+    /**
+     * Handles collision detection between the character and enemies.
+     */
     collisionEnemy() {
         this.level.enemies.forEach(enemy => {
             if (!enemy.isDead() && this.character.isColliding(enemy)) {
@@ -165,6 +197,9 @@ class World {
     }
 
 
+    /**
+     * Handles collision detection between the character and bottles.
+     */
     collisionBottle() {
         for (let i = 0; i < this.bottles.length; i++) {
             let bottle = this.bottles[i];
@@ -179,6 +214,9 @@ class World {
     }
 
 
+    /**
+     * Handles collision detection between the character and coins.
+     */
     collisionCoin() {
         for (let i = 0; i < this.coins.length; i++) {
             let coin = this.coins[i];
@@ -194,6 +232,10 @@ class World {
     }
 
 
+    /**
+     * Removes a chicken from the level.
+     * @param {Object} chicken - The chicken object to be removed.  
+     */
     removeChicken(chicken) {
         let index = this.level.enemies.indexOf(chicken);
         if (index !== -1) {
@@ -202,6 +244,9 @@ class World {
     }
 
 
+    /**
+     * Draws all elements on the canvas.
+     */
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -258,6 +303,10 @@ class World {
     }
 
 
+    /**
+     * Adds an object to the map for drawing.
+     * @param {Object} mo - The object to be added to the map.
+     */
     addToMap(mo) {
         if (mo.otherDirection) {
             this.flipImage(mo);
@@ -272,6 +321,10 @@ class World {
     }
 
 
+    /**
+     * Flips the image horizontally for objects facing the opposite direction.
+     * @param {Object} mo - The object whose image is flipped.
+     */
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
@@ -280,13 +333,19 @@ class World {
     }
 
 
+    /**
+     * Restores the image orientation after flipping.
+     * @param {Object} mo - The object whose image orientation is restored.
+     */
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
     }
 
 
-    //Background img's für positiven und negativen x bereich
+    /**
+     * Generates background objects for the game world.
+     */
     generateBackgroundObjects() {
 
         for (let i = -this.totalBackgrounds; i < this.totalBackgrounds; i++) {
@@ -298,6 +357,10 @@ class World {
     }
 
 
+    /**
+     * Generates background layers for the game world.
+     * @param {number} setOffset - The offset for the background layers.
+     */
     generateBackground() {
         for (let j = 0; j < this.backgroundsPerSet; j++) {
             const xPosition = setOffset + this.backgroundWidth * j;
@@ -312,6 +375,9 @@ class World {
     }
 
 
+    /**
+     * Generates bottle objects for the game world.
+     */
     generateBottle() {
         for (let i = 0; i < 20; i++) {
             let bottle = new Bottles();
@@ -320,6 +386,9 @@ class World {
     }
 
 
+    /**
+     * Generates coins objects for the game world.
+     */
     generateCoin() {
         for (let i = 0; i < 9; i++) {
             let coin = new Coins();
@@ -328,6 +397,9 @@ class World {
     }
 
 
+    /**
+     * Shows the end screen when the game ends.
+     */
     showEndScreen() {
         document.getElementById("canvas").classList.add("d-none");
         document.getElementById("endScreen").classList.remove("d-none");

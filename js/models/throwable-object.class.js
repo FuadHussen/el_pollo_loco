@@ -36,6 +36,10 @@ class ThrowAbleObject extends MovableObject {
     }
 
 
+    /**
+     * Throws the bottle in the specified direction.
+     * @param {string} direction - The direction in which the bottle is thrown ('left' or 'right').
+     */
     throw(direction) {
         this.speedY = 30;
         this.applyGravitiy();
@@ -49,6 +53,10 @@ class ThrowAbleObject extends MovableObject {
     }
 
 
+    /**
+     * Moves the bottle horizontally based on its throwing direction.
+     * @param {string} direction - The direction in which the bottle is thrown ('left' or 'right').
+     */
     move(direction) {
         if (!this.break) {
             if (direction === 'left') {
@@ -63,6 +71,10 @@ class ThrowAbleObject extends MovableObject {
     }
 
 
+    /**
+     * Checks if the bottle is above the ground level.
+     * @returns {boolean} - True if the bottle is above the ground, otherwise false.
+     */
     isAboveGround() {
         return this.y < 350;
     }
@@ -73,6 +85,9 @@ class ThrowAbleObject extends MovableObject {
     };
 
 
+    /**
+     * Rotates the bottle during its flight, and triggers splash animation upon collision.
+     */
     rotate() {
         if (this.break) {
             this.acceleration = 0;
@@ -89,6 +104,9 @@ class ThrowAbleObject extends MovableObject {
     }
 
 
+    /**
+     * Plays the splash animation when the bottle collides with the ground.
+     */
     playSplashAnimation() {
         let currentIndex = 0;
         let interval = setStoppableInterval(() => {
@@ -104,6 +122,9 @@ class ThrowAbleObject extends MovableObject {
     }
 
 
+    /**
+     * Removes the bottle from the game.
+     */
     removeSelf() {
         let index = this.world.throwAbleObject.indexOf(this);
         if (index !== -1) {

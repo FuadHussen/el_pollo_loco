@@ -90,6 +90,9 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Updates the game logic for the character.
+     */
     updateGameLogic() {
         setStoppableInterval(() => {
             this.jumpOnChicken();
@@ -97,17 +100,26 @@ class Character extends MovableObject {
         }, 1000 / 60);
     }
 
-
+    
+    /**
+     * Animates the character.
+     */
     animate() {
         setStoppableInterval(() => this.moveCharacter(), 1000 / 1000);
     }
 
 
+    /**
+     * Updates the status of the character.
+     */
     updateCharacterStatus() {
         setStoppableInterval(() => this.playCharacter(), 100);
     }
 
 
+    /**
+     * Moves the character based on user input.
+     */
     moveCharacter() {
         this.walking_sound.pause();
         if (this.canMoveRight()) {
@@ -128,26 +140,45 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Checks if the character can jump.
+     * @returns {boolean} True if the character can jump 
+     */
     canJump() {
         return this.world.keyboard.UP && !this.isAboveGround();
     }
 
 
+    /**
+     * Checks if the character can jump.
+     * @returns {boolean} True if the character can jump 
+     */
     canJumpSpace() {
         return this.world.keyboard.SPACE && !this.isAboveGround();
     }
 
 
+    /**
+     * Checks if the character can move right.
+     * @returns {boolean} True if the character can move right
+     */
     canMoveRight() {
         return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
     }
 
 
+    /**
+     * Checks if the character can move left
+     * @returns {boolean} True if the character can move left
+     */
     canMoveLeft() {
         return this.world.keyboard.LEFT && this.x > 0;
     }
 
 
+    /**
+     * Moves the character to the right and plays the associated sound.
+     */
     moveRight() {
         super.moveRight();
         this.otherDirection = false;
@@ -155,6 +186,9 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Moves the character to the left and plays the associated sound.
+     */
     moveLeft() {
         super.moveLeft();
         this.otherDirection = true;
@@ -162,6 +196,9 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Plays the character's animation based on its status.
+     */
     playCharacter() {
         if (this.isDead()) {
             this.characterDead();
@@ -176,6 +213,10 @@ class Character extends MovableObject {
         }
     }
     
+
+    /**
+     * Checks the inactivity of the character and plays the sleep animation along with the snoring sound.
+     */
     checkInactivity() {
         const currentTime = Date.now();
         const timeSinceLastMovement = currentTime - this.lastMovementTime;
@@ -185,6 +226,10 @@ class Character extends MovableObject {
         }
     }
     
+
+    /**
+     * Plays the sleep animation of the character along with the snoring sound.
+     */
     playSleepAnimation() {    
         let i = 0;
         if (i < 20) {
@@ -194,12 +239,17 @@ class Character extends MovableObject {
     }
         
     
+    /**
+     * Plays the snoring sound.
+     */
     playSnoringSound() {
         this.snoring_sound.play();
     }
     
 
-
+    /**
+     * Displays the dead character animation and shows the end screen overlay.
+     */
     characterDead() {
         let i = 0;
         if (i < 7) {
@@ -210,12 +260,18 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Displays the hurt animation of the character and plays the associated sound.
+     */
     characterHurt() {
         this.playAnimation(this.IMAGES_HURT);
         this.hurt_sound.play();
     }
 
 
+    /**
+     * Moves the character and plays the walking animation.
+     */
     move() {
         if (this.leftOrRight()) {
             this.playAnimation(this.IMAGES_WALKING);
@@ -224,16 +280,26 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Checks if the character is moving left or right
+     * @returns {boolean} True if the character is moving left or right
+     */
     leftOrRight() {
         return this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
     }
 
 
+    /**
+     * Makes the character jump by setting the vertical speed.
+     */
     jump() {
         this.speedY = 25;
     }
 
 
+    /**
+     * Checks if the character has jumped on any chicken enemies and performs actions accordingly.
+     */
     jumpOnChicken() {
         this.world.level.enemies.forEach((enemy, index) => {
             this.characterJumpedOnChicken(enemy, index);
@@ -241,6 +307,11 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Handles the logic when the character jumps on a chicken enemy.
+     * @param {object} enemy - The chicken enemy that the character has jumped on.
+     * @param {number} index - The index of the enemy in the enemies array.
+     */
     characterJumpedOnChicken(enemy, index) {
         if (this.jumpOnEnemy(enemy)) {
             this.removeEnemy(enemy, index);
@@ -250,6 +321,11 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Determines if the character is currently jumping on an enemy.
+     * @param {object} enemy - The enemy being checked for collision.
+     * @returns {boolean} True if the character is jumping on the enemy
+     */
     jumpOnEnemy(enemy) {
         return (enemy instanceof Chicken || enemy instanceof SmallChicken) &&
             this.isColliding(enemy) &&
@@ -258,6 +334,10 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Handles the character getting hit by the endboss and adjusts character's energy accordingly.
+     * @param {number} damage - The amount of damage inflicted by the endboss.
+     */
     hitByEndboss(damage) {
         this.energy -= damage;
         if (this.energy < 0) {
@@ -268,6 +348,9 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Checks for collisions between bottles and chicken enemies, triggering actions accordingly.
+     */
     bottleOnChicken() {
         this.world.throwAbleObject.forEach((bottle) => {
             if (!bottle.enemyHit) {
@@ -284,6 +367,11 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Handles the logic when a bottle thrown by the character hits an enemy.
+     * @param {object} enemy - The enemy that the bottle hit.
+     * @param {number} index - The index of the enemy in the enemies array.
+     */
     bottleHitEnemy(enemy, index) {
         if (enemy instanceof Endboss) {
             if (this.world.endbossStatusbar.percentage <= 0) {
@@ -302,11 +390,22 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Checks for collision between a bottle and an enemy.
+     * @param {object} bottle - The bottle being checked for collision.
+     * @param {object} enemy - The enemy being checked for collision.
+     * @returns {boolean} True if there is a collision between the bottle and the enemy
+     */
     checkBottleCollision(bottle, enemy) {
         return bottle.isColliding(enemy) && (enemy instanceof Chicken || enemy instanceof SmallChicken || enemy instanceof Endboss)
     }
 
 
+    /**
+     * Removes an enemy from the level after it's been defeated.
+     * @param {object} enemy - The enemy to be removed.
+     * @param {number} index - The index of the enemy in the enemies array.
+     */
     removeEnemy(enemy, index) {
         enemy.dead = true;
         setTimeout(() => this.world.level.enemies.splice(index, 1), 500);

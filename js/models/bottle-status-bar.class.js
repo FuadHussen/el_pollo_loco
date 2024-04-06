@@ -23,6 +23,9 @@ class BottleStatusBar extends DrawableObject {
     }
 
 
+    /**
+     * @param {number} percentage 
+     */
     setPercentage(percentage) {
         this.percentage = percentage;
         let bottlePath = this.STATUSBAR_BOTTLE[this.resolveImageIndex()];
@@ -30,6 +33,9 @@ class BottleStatusBar extends DrawableObject {
     }
 
 
+    /**
+     * @returns {number} 
+     */
     resolveImageIndex() {
         if (this.percentage == 0) {
             return 0;

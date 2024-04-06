@@ -12,12 +12,16 @@ class Bottles extends DrawableObject {
         this.animate();
     }
 
+
     animate() {
         setStoppableInterval(() => {
             this.playAnimation(this.Bottle);
         }, 1000 / 2);
     }
 
+    /**
+     * @param {Array} images 
+     */
     playAnimation(images) {
         let i = this.currentImage % images.length;
         let path = images[i];
