@@ -208,11 +208,11 @@ class Character extends MovableObject {
         } else if (this.isAboveGround()) {
             this.playAnimation(this.IMAGES_JUMPING);
         } else {
+            this.loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
             this.move();
             this.checkInactivity();
         }
-    }
-    
+    }    
 
     /**
      * Checks the inactivity of the character and plays the sleep animation along with the snoring sound.

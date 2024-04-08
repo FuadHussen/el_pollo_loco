@@ -64,7 +64,7 @@ class Endboss extends MovableObject {
 
         startAnimation();
 
-        // Überprüfen, ob der Endboss die 2050 erreicht hat
+        // Überprüfen ob der Endboss die 2050 erreicht hat
         setStoppableInterval(() => this.characterOnX(), 200);
     }
 

@@ -45,15 +45,7 @@ class World {
     
             if (this.isCollidingWithSoundElement(x, y)) {
                 this.soundElement.toggleSound();
-    
-                // Verhindern, dass das Ereignis weitergeleitet wird
                 event.stopPropagation();
-            }
-        });
-        
-        document.addEventListener('click', (event) => {
-            if (!this.isCollidingWithSoundElement(event.clientX, event.clientY)) {
-                this.soundElement.toggleSound();
             }
         });
     }
@@ -70,18 +62,11 @@ class World {
     
             if (this.isCollidingWithRestartElement(x, y)) {
                 this.restartElement.toggleRestart();
-    
-                // Verhindern, dass das Ereignis weitergeleitet wird
+                window.location.reload();
                 event.stopPropagation();
             }
         });
-        
-        document.addEventListener('click', (event) => {
-            if (!this.isCollidingWithRestartElement(event.clientX, event.clientY)) {
-                this.restartElement.toggleRestart();
-            }
-        });
-    }
+    }    
 
 
     /**

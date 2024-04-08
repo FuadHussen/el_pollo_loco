@@ -21,7 +21,7 @@ class Sound extends DrawableObject {
      * If sound is playing, it pauses the background sound and updates the sound icon.
      */
     toggleSound() {
-        if (this.isMuted) {
+        if (!this.isMuted) {
             background_sound.play();
             this.loadImage(this.IMAGES_SOUND[0]);
         } else {
