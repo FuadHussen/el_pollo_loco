@@ -68,7 +68,7 @@ function mobileAlert() {
     let mobileAlert = document.getElementById('mobileAlert');
     let startScreen = document.getElementById('startScreen');
 
-    if (window.matchMedia('(max-width: 700px)').matches) {
+    if (window.matchMedia('(max-width: 667px)').matches) {
         mobileAlert.classList.remove('d-none');
         startScreen.classList.add('d-none');
         document.querySelector('h1').classList.add('d-none');
