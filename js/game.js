@@ -7,7 +7,6 @@ let i = 1;
 let background_sound = new Audio('audio/backgroundSound.mp3');
 
 
-
 function init() {
     canvas = document.getElementById("canvas");
 
@@ -68,7 +67,7 @@ function mobileAlert() {
     let mobileAlert = document.getElementById('mobileAlert');
     let startScreen = document.getElementById('startScreen');
 
-    if (window.matchMedia('(max-width: 667px)').matches) {
+    if (window.matchMedia('(max-width: 665px)').matches) {
         mobileAlert.classList.remove('d-none');
         startScreen.classList.add('d-none');
         document.querySelector('h1').classList.add('d-none');

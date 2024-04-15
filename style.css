@@ -12,6 +12,10 @@ body {
     background-position: center;
     margin: 0;
     padding: 0;
+    background-size: cover;
+    height: 100vh;
+    width: 100%;
+    background-repeat: no-repeat;
 }
 
 .mobileAlert {
@@ -226,6 +230,7 @@ canvas {
 
     .startScreen {
         width: 100%;
+        height: 100vh;
     }
 
     #endScreen {

@@ -100,7 +100,7 @@ class Character extends MovableObject {
         }, 1000 / 60);
     }
 
-    
+
     /**
      * Animates the character.
      */
@@ -130,11 +130,15 @@ class Character extends MovableObject {
         }
         if (this.canJump()) {
             this.jump();
-            this.jump_sound.play();
+            if (this.world.soundElement.isMuted) {
+                this.jump_sound.play();
+            }
         }
         if (this.canJumpSpace()) {
             this.jump();
-            this.jump_sound.play();
+            if (this.world.soundElement.isMuted) {
+                this.jump_sound.play();
+            }
         }
         this.world.camera_x = -this.x + 100;
     }
@@ -182,7 +186,9 @@ class Character extends MovableObject {
     moveRight() {
         super.moveRight();
         this.otherDirection = false;
-        this.walking_sound.play();
+        if (this.world.soundElement.isMuted) {
+            this.walking_sound.play();
+        }
     }
 
 
@@ -192,7 +198,9 @@ class Character extends MovableObject {
     moveLeft() {
         super.moveLeft();
         this.otherDirection = true;
-        this.walking_sound.play();
+        if (this.world.soundElement.isMuted) {
+            this.walking_sound.play();
+        }
     }
 
 
@@ -212,7 +220,7 @@ class Character extends MovableObject {
             this.move();
             this.checkInactivity();
         }
-    }    
+    }
 
     /**
      * Checks the inactivity of the character and plays the sleep animation along with the snoring sound.
@@ -220,32 +228,36 @@ class Character extends MovableObject {
     checkInactivity() {
         const currentTime = Date.now();
         const timeSinceLastMovement = currentTime - this.lastMovementTime;
-        if (timeSinceLastMovement >= 5000) { 
+        if (timeSinceLastMovement >= 5000) {
             this.playSleepAnimation();
             this.playSnoringSound();
         }
     }
-    
+
 
     /**
      * Plays the sleep animation of the character along with the snoring sound.
      */
-    playSleepAnimation() {    
+    playSleepAnimation() {
         let i = 0;
         if (i < 20) {
             this.playAnimation(this.IMAGES_SLEEP);
-            this.snoring_sound.play();
-        }    
+            if (this.world.soundElement.isMuted) {
+                this.snoring_sound.play();
+            }
+        }
     }
-        
-    
+
+
     /**
      * Plays the snoring sound.
      */
     playSnoringSound() {
-        this.snoring_sound.play();
+        if (this.world.soundElement.isMuted) {
+            this.snoring_sound.play();
+        }
     }
-    
+
 
     /**
      * Displays the dead character animation and shows the end screen overlay.
@@ -265,7 +277,9 @@ class Character extends MovableObject {
      */
     characterHurt() {
         this.playAnimation(this.IMAGES_HURT);
-        this.hurt_sound.play();
+        if (this.world.soundElement.isMuted) {
+            this.hurt_sound.play();
+        }
     }
 
 
@@ -316,7 +330,9 @@ class Character extends MovableObject {
         if (this.jumpOnEnemy(enemy)) {
             this.removeEnemy(enemy, index);
             this.jump();
-            this.dead_chicken.play();
+            if (this.world.soundElement.isMuted) {
+                this.dead_chicken.play();
+            }
         }
     }
 
@@ -376,7 +392,9 @@ class Character extends MovableObject {
         if (enemy instanceof Endboss) {
             if (this.world.endbossStatusbar.percentage <= 0) {
                 enemy.deadAnimation();
-                this.dead_chicken.play();
+                if (this.world.soundElement.isMuted) {
+                    this.dead_chicken.play();
+                }
                 this.removeEnemy(enemy, index);
                 setStoppableInterval(() => this.world.showEndScreen(), 1000);
             } else {
@@ -385,7 +403,9 @@ class Character extends MovableObject {
             }
         } else {
             this.removeEnemy(enemy, index);
-            this.dead_chicken.play();
+            if (this.world.soundElement.isMuted) {
+                this.dead_chicken.play();
+            }
         }
     }
 

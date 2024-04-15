@@ -96,12 +96,14 @@ class ThrowAbleObject extends MovableObject {
             if (!this.splashPlayed) {
                 this.playSplashAnimation();
                 this.splashPlayed = true;
-                this.bottle_break.play();
+                if (this.world.soundElement.isMuted) { // Check if sound is not muted
+                    this.bottle_break.play(); // If not muted, play the sound
+                }
             }
         } else {
             this.playAnimation(this.IMAGE_BOTTLE_ROTATION);
         }
-    }
+    }    
 
 
     /**

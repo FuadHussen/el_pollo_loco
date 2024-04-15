@@ -42,7 +42,7 @@ class World {
             const rect = this.canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
-    
+
             if (this.isCollidingWithSoundElement(x, y)) {
                 this.soundElement.toggleSound();
                 event.stopPropagation();
@@ -59,14 +59,14 @@ class World {
             const rect = this.canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
-    
+
             if (this.isCollidingWithRestartElement(x, y)) {
                 this.restartElement.toggleRestart();
                 window.location.reload();
                 event.stopPropagation();
             }
         });
-    }    
+    }
 
 
     /**
@@ -155,11 +155,11 @@ class World {
             bottle.world = this;
             this.throwAbleObject.push(bottle);
             this.pickedUpBottles--;
-    
+
             this.bottle.setPercentage(this.bottle.percentage - 20);
         }
     }
-    
+
 
     /**
      * Handles collision detection between the character and enemies.
@@ -194,6 +194,8 @@ class World {
                 this.bottle_collect.play();
                 this.bottles.splice(i, 1);
                 i--;
+            } else if (!this.soundElement.isMuted) {
+                this.bottle_collect.pause();
             }
         }
     }
@@ -213,6 +215,9 @@ class World {
                     i--;
                 }
             }
+        }
+        if (!this.soundElement.isMuted) {
+            this.coin_collect.pause();
         }
     }
 

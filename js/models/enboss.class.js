@@ -96,7 +96,9 @@ class Endboss extends MovableObject {
      */
     characterOnX(animationInterval) {
         if (world.character.x >= 2050) {
-            this.endboss_sound.play();
+            if (world.soundElement.isMuted) { 
+                this.endboss_sound.play(); 
+            }
             clearInterval(animationInterval);
             this.hadFirstContact = true;
             i = 0;
