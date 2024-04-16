@@ -395,7 +395,11 @@ class World {
         document.getElementById("endScreen").classList.remove("d-none");
 
         document.getElementById("endScreen").style.display = "block";
-        document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
         document.querySelector(".hud").style.display = 'none';
+        if (this.endbossStatusbar.percentage < 0) {
+        document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/game over!.png')";
+        } else {
+            document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
+        }
     }
 }

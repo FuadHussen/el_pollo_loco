@@ -107,6 +107,7 @@ body {
 #endScreen {
     width: 720px;
     height: 480px;
+    border-radius: 16px;
 }
 
 
