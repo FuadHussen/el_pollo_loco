@@ -398,7 +398,7 @@ class Character extends MovableObject {
                 this.removeEnemy(enemy, index);
                 setStoppableInterval(() => this.world.showEndScreen(), 1000);
             } else {
-                enemy.endbossHurt(30);
+                enemy.endbossHurt(50);
                 enemy.getSmaller();
             }
         } else {

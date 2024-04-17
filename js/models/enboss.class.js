@@ -102,7 +102,7 @@ class Endboss extends MovableObject {
             clearInterval(animationInterval);
             this.hadFirstContact = true;
             i = 0;
-            setStoppableInterval(() => this.moveLeft(this.speed = 0.5), 1000 / 60);
+            setStoppableInterval(() => this.moveLeft(this.speed = 0.25), 1000 / 60);
         }
     }
 
