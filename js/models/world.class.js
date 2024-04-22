@@ -1,4 +1,4 @@
-class World {
+class World extends MovableObject{
     character = new Character('img/2_character_pepe/2_walk/W-21.png');
     level = level1;
     canvas;
@@ -25,6 +25,7 @@ class World {
 
 
     constructor(canvas, keyboard) {
+        super();
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
@@ -369,7 +370,7 @@ class World {
      * Generates bottle objects for the game world.
      */
     generateBottle() {
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 10; i++) {
             let bottle = new Bottles();
             this.bottles.push(bottle);
         }
@@ -396,10 +397,10 @@ class World {
 
         document.getElementById("endScreen").style.display = "block";
         document.querySelector(".hud").style.display = 'none';
-        if (this.endbossStatusbar.percentage < 0) {
-        document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/game over!.png')";
+        if (this.character.isDead()) {
+        document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
         } else {
-            document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
+            document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/game over!.png')";
         }
     }
 }

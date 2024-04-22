@@ -15,8 +15,10 @@ function init() {
     }
 
     document.getElementById("startGame").addEventListener("click", function () {
-        document.getElementById("startScreen").classList.add("d-none");
+        document.getElementById("startScreen").style.display = 'none';
         document.getElementById("canvas").classList.remove("d-none");
+        document.getElementById("startDiv").classList.add("d-none");
+        document.getElementById("startScreen").style.background = 'none';
         background_sound.play();
         initLevel();
         gameStarted = true;
