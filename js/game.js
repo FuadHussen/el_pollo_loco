@@ -67,18 +67,23 @@ function setStoppableInterval(fn, time) {
  */
 function mobileAlert() {
     let mobileAlert = document.getElementById('mobileAlert');
+    let canvas = document.getElementById('canvas');
     let startScreen = document.getElementById('startScreen');
+    let hud = document.getElementById('hud');
+    let canvasContainer = document.getElementById('canvasContainer');
 
     if (window.matchMedia('(max-width: 665px)').matches) {
         mobileAlert.classList.remove('d-none');
         startScreen.classList.add('d-none');
+        canvasContainer.style.display = 'none';
+        canvas.style.display = 'none';
         document.querySelector('h1').classList.add('d-none');
-        document.querySelector('.hud').classList.add('d-none');
     } else {
         mobileAlert.classList.add('d-none');
         startScreen.classList.remove('d-none');
+        canvas.style.display = 'flex';
         document.querySelector('h1').classList.remove('d-none');
-        document.querySelector('.hud').classList.remove('d-none');
+        canvasContainer.style.display = 'flex';
     }
 }
 

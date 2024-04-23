@@ -1,4 +1,4 @@
-class World extends MovableObject{
+class World extends MovableObject {
     character = new Character('img/2_character_pepe/2_walk/W-21.png');
     level = level1;
     canvas;
@@ -392,15 +392,26 @@ class World extends MovableObject{
      * Shows the end screen when the game ends.
      */
     showEndScreen() {
-        document.getElementById("canvas").classList.add("d-none");
-        document.getElementById("endScreen").classList.remove("d-none");
-
-        document.getElementById("endScreen").style.display = "block";
-        document.querySelector(".hud").style.display = 'none';
-        if (this.character.isDead()) {
-        document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
+        if (window.matchMedia('(max-width: 665px)').matches) {
+            let mobileAlert = document.getElementById('mobileAlert');
+            mobileAlert.classList.remove('d-none');
+            document.getElementById("canvas").classList.add("d-none");
+            document.getElementById("endScreen").classList.add("d-none");
+            document.querySelector('h1').classList.add('d-none');
+            document.querySelector('.hud').classList.add('d-none');
         } else {
-            document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/game over!.png')";
+            let mobileAlert = document.getElementById('mobileAlert');
+            mobileAlert.classList.add('d-none');
+            document.getElementById("canvas").classList.add("d-none");
+            document.getElementById("endScreen").classList.remove("d-none");
+            document.getElementById("endScreen").style.display = "block";
+            document.querySelector(".hud").style.display = 'none';
+            
+            if (this.character.isDead()) {
+                document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
+            } else {
+                document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/game over!.png')";
+            }
         }
-    }
+    }    
 }
