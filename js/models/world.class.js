@@ -172,7 +172,7 @@ class World extends MovableObject {
                     enemy.energy = 0;
                 } else {
                     if (enemy instanceof Endboss) {
-                        this.character.hitByEndboss(60);
+                        this.character.hitByEndboss(100);
                     } else {
                         this.character.hit();
                     }

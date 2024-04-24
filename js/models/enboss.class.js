@@ -161,16 +161,4 @@ class Endboss extends MovableObject {
             }
         }, 1000 / 10);
     }
-
-
-    /**
-     * Shrinks the end boss when its status is above a certain threshold.
-     */
-    getSmaller() {
-        if (world.endbossStatusbar.percentage > 90) {
-            this.width = 250;
-            this.height = 250;
-            this.y = 200;
-        }
-    }
 }

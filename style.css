@@ -262,6 +262,17 @@ canvas {
     }
 }
 
+@media only screen and (max-width: 896px) {
+    canvas {
+        height: 100vh;
+        width: 100%;
+    }
+    
+    h1 {
+        display: none;
+    }
+}
+
 @media only screen and (min-width: 901px) {
     .hud {
         display: none !important;
