@@ -5,6 +5,7 @@ class MovableObject extends DrawableObject {
     acceleration = 2.5;
     energy = 100;
     lastHit = 0;
+    isAlive = true;
 
 
     applyGravitiy() {
@@ -88,7 +89,9 @@ class MovableObject extends DrawableObject {
      * Moves the object to the left.
      */
     moveLeft() {
-        this.x -= this.speed;
+        if (this.isAlive && world.endboss.isAlive) {
+            this.x -= this.speed;
+        }
     }
 
 
@@ -96,7 +99,9 @@ class MovableObject extends DrawableObject {
      * Moves the object to the right.
      */
     moveRight() {
-        this.x += this.speed;
+        if (this.isAlive && world.endboss.isAlive) {
+            this.x += this.speed;
+        }
     }
 
 
@@ -104,6 +109,8 @@ class MovableObject extends DrawableObject {
      * Initiates a jump action for the object.
      */
     jump() {
-        this.speedY = 25;
+        if (this.isAlive && world.endboss.isAlive) {
+            this.speedY = 25;
+        }
     }
 }

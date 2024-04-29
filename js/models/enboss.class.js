@@ -77,7 +77,7 @@ class Endboss extends MovableObject {
             world.showEndScreen();
             return;
         }
-    
+
         if (this.hadFirstContact) {
             this.playAnimation(this.ENDBOSS_WALKING);
         } else {
@@ -91,18 +91,26 @@ class Endboss extends MovableObject {
     }
 
 
+    moveLeft() {
+        if (this.isAlive) {
+            this.x -= 2;
+        }
+    }
+
+
     /**
      * Checks if the character has reached the X position to trigger end boss actions.
      */
     characterOnX(animationInterval) {
-        if (world.character.x >= 2050) {
-            if (world.soundElement.isMuted) { 
-                this.endboss_sound.play(); 
+        if (world.character.x >= 2050 && !this.endbossSoundPlayed) {
+            if (world.soundElement.isMuted) {
+                this.endboss_sound.play();
             }
+            this.endbossSoundPlayed = true;
             clearInterval(animationInterval);
             this.hadFirstContact = true;
             i = 0;
-            setStoppableInterval(() => this.moveLeft(this.speed = 0.25), 1000 / 60);
+            setStoppableInterval(() => this.moveLeft(), 1000 / 60);
         }
     }
 
@@ -140,6 +148,7 @@ class Endboss extends MovableObject {
     endbossDead() {
         if (world.endbossStatusbar.percentage <= 0) {
             this.deadAnimation();
+            world.endboss.isAlive = false;
             setInterval(() => world.showEndScreen(), 1000);
         }
         if (this.x < 125) {
@@ -152,6 +161,7 @@ class Endboss extends MovableObject {
      * Plays the dead animation of the end boss.
      */
     deadAnimation() {
+        this.isAlive = false;
         let animateInterval = setStoppableInterval(() => {
             this.playAnimation(this.ENDBOSS_DEAD);
             this.currentImageIndexHurt++;

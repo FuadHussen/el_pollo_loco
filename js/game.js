@@ -28,24 +28,31 @@ function init() {
     });
 
     setStoppableInterval();
-    closeInfoBox();
     mobileAlert();
 }
 
 
 function openInfoBox() {
     let infoBox = document.getElementById("infoBox");
+    let startScreen = document.getElementById('startScreen');
+
+    if (infoBox.style.display === "block") {
+        infoBox.style.display = "none";
+        startScreen.style.cursor = "auto";
+        return;
+    }
+
     infoBox.style.display = "block";
-}
+    startScreen.style.cursor = "pointer";
 
+    document.addEventListener('click', function closeIfClickedOutside(event) {
+        let clickedElement = event.target;
 
-function closeInfoBox() {
-    document.addEventListener('click', function (event) {
-        let infoBox = document.getElementById('infoBox');
-        let infoIcon = document.querySelector('.fa-circle-info');
-
-        if (event.target !== infoBox && event.target !== infoIcon && !infoBox.contains(event.target)) {
+        if (clickedElement !== infoBox && !infoBox.contains(clickedElement) &&
+            clickedElement.getAttribute('onclick') === null) {
             infoBox.style.display = 'none';
+            startScreen.style.cursor = "auto";
+            document.removeEventListener('click', closeIfClickedOutside);
         }
     });
 }

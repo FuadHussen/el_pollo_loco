@@ -2,7 +2,7 @@ class Character extends MovableObject {
 
     height = 280;
     y = 70;
-    speed = 2;
+    speed = 7;
     currentEnemy;
 
     IMAGES_WALKING = [
@@ -105,7 +105,7 @@ class Character extends MovableObject {
      * Animates the character.
      */
     animate() {
-        setStoppableInterval(() => this.moveCharacter(), 1000 / 1000);
+        setStoppableInterval(() => this.moveCharacter(), 1000 / 60);
     }
 
 
@@ -113,7 +113,7 @@ class Character extends MovableObject {
      * Updates the status of the character.
      */
     updateCharacterStatus() {
-        setStoppableInterval(() => this.playCharacter(), 100);
+        setStoppableInterval(() => this.playCharacter(), 50);
     }
 
 
@@ -122,21 +122,21 @@ class Character extends MovableObject {
      */
     moveCharacter() {
         this.walking_sound.pause();
-        if (this.canMoveRight()) {
+        if (this.canMoveRight() && this.isAlive && world.endboss.isAlive) {
             this.moveRight();
         }
-        if (this.canMoveLeft()) {
+        if (this.canMoveLeft() && this.isAlive && world.endboss.isAlive) {
             this.moveLeft();
         }
         if (this.canJump()) {
             this.jump();
-            if (this.world.soundElement.isMuted) {
+            if (this.world.soundElement.isMuted && this.isAlive && world.endboss.isAlive) {
                 this.jump_sound.play();
             }
         }
         if (this.canJumpSpace()) {
             this.jump();
-            if (this.world.soundElement.isMuted) {
+            if (this.world.soundElement.isMuted && this.isAlive && world.endboss.isAlive) {
                 this.jump_sound.play();
             }
         }
@@ -210,7 +210,7 @@ class Character extends MovableObject {
     playCharacter() {
         if (this.isDead()) {
             this.characterDead();
-            i++;
+            // i++;
         } else if (this.isHurt()) {
             this.characterHurt();
         } else if (this.isAboveGround()) {
@@ -242,7 +242,7 @@ class Character extends MovableObject {
         let i = 0;
         if (i < 20) {
             this.playAnimation(this.IMAGES_SLEEP);
-            if (this.world.soundElement.isMuted) {
+            if (this.world.soundElement.isMuted && world.endboss.isAlive) {
                 this.snoring_sound.play();
             }
         }
@@ -253,7 +253,7 @@ class Character extends MovableObject {
      * Plays the snoring sound.
      */
     playSnoringSound() {
-        if (this.world.soundElement.isMuted) {
+        if (this.world.soundElement.isMuted && world.endboss.isAlive) {
             this.snoring_sound.play();
         }
     }
@@ -263,11 +263,25 @@ class Character extends MovableObject {
      * Displays the dead character animation and shows the end screen overlay.
      */
     characterDead() {
-        let i = 0;
-        if (i < 7) {
-            this.playAnimation(this.IMAGES_DEAD);
-            setTimeout(() => this.world.showEndScreen(), 1000);
-            this.walking_sound.pause();
+        if (!this.animationInProgress) {
+            this.animationInProgress = true;
+            let i = 0;
+            let numFrames = this.IMAGES_DEAD.length;
+
+            let animate = () => {
+                if (i < numFrames) {
+                    this.playAnimation(this.IMAGES_DEAD);
+                    i++;
+                    setTimeout(animate, 150);
+                    this.walking_sound.pause();
+                    this.isAlive = false;
+                } else {
+                    this.animationInProgress = false;
+                    this.world.showEndScreen();
+                    this.walking_sound.pause();
+                }
+            };
+            animate();
         }
     }
 
