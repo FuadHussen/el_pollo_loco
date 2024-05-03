@@ -410,7 +410,7 @@ class World extends MovableObject {
             if (this.character.isDead()) {
                 document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
             } else {
-                document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/game over!.png')";
+                document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/won_2.png')";
             }
         }
     }    

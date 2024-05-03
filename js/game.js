@@ -32,6 +32,11 @@ function init() {
 }
 
 
+function newGame() {
+    window.location.reload();
+}
+
+
 function openInfoBox() {
     let infoBox = document.getElementById("infoBox");
     let startScreen = document.getElementById('startScreen');

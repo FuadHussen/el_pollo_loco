@@ -4,6 +4,7 @@ class Character extends MovableObject {
     y = 70;
     speed = 7;
     currentEnemy;
+    energy = 100;
 
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
