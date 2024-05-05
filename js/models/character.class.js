@@ -73,7 +73,7 @@ class Character extends MovableObject {
     snoring_sound = new Audio('audio/snoringSound.mp3');
 
     isWalking = false;
-
+    sleepAnimationActive = false;
 
 
     constructor() {
@@ -140,10 +140,13 @@ class Character extends MovableObject {
             if (this.world.soundElement.isMuted && this.isAlive && world.endboss.isAlive) {
                 this.jump_sound.play();
             }
+        }        
+        if (this.leftOrRight()) {
+            this.sleepAnimationActive = false;
         }
         this.world.camera_x = -this.x + 100;
     }
-
+    
 
     /**
      * Checks if the character can jump.
@@ -205,23 +208,42 @@ class Character extends MovableObject {
     }
 
 
+    playJumpAnimation() {
+        this.currentImage = 0;
+        let intervalId = setInterval(() => {
+            if (this.currentImage < this.IMAGES_JUMPING.length - 1) {
+                this.playAnimation(this.IMAGES_JUMPING);
+                this.currentImage++;
+            } else {
+                if (!this.isAboveGround()) {
+                    clearInterval(intervalId);
+                }
+            }
+        }, 100);
+    }
+
+
+
     /**
      * Plays the character's animation based on its status.
      */
     playCharacter() {
         if (this.isDead()) {
             this.characterDead();
-            // i++;
         } else if (this.isHurt()) {
             this.characterHurt();
         } else if (this.isAboveGround()) {
-            this.playAnimation(this.IMAGES_JUMPING);
+            this.playJumpAnimation(this.IMAGES_JUMPING);
+        } else if (this.checkInactivity()) {
+            this.playSleepAnimation();
         } else {
-            this.loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
+            if (!this.sleepAnimationActive) {
+                this.loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
+            }
             this.move();
-            this.checkInactivity();
         }
     }
+
 
     /**
      * Checks the inactivity of the character and plays the sleep animation along with the snoring sound.
@@ -240,12 +262,17 @@ class Character extends MovableObject {
      * Plays the sleep animation of the character along with the snoring sound.
      */
     playSleepAnimation() {
-        let i = 0;
-        if (i < 20) {
-            this.playAnimation(this.IMAGES_SLEEP);
-            if (this.world.soundElement.isMuted && world.endboss.isAlive) {
-                this.snoring_sound.play();
-            }
+        if (!this.sleepAnimationActive) {
+            this.sleepAnimationActive = true;
+            this.currentImage = 0;
+            let intervalId = setInterval(() => {
+                if (this.currentImage < this.IMAGES_SLEEP.length - 1) {
+                    this.playAnimation(this.IMAGES_SLEEP);
+                    this.currentImage++;
+                } else {
+                    clearInterval(intervalId);
+                }
+            }, 250);
         }
     }
 
