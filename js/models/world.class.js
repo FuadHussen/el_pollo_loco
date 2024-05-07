@@ -240,33 +240,48 @@ class World extends MovableObject {
      */
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
+    
+        this.drawBackground();
+        this.drawFixedObjects();
+        this.drawDynamicObjects();
+    
+        let self = this;
+        requestAnimationFrame(function () {
+            self.draw();
+        });
+    }
+    
+    
+    drawBackground() {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
+        this.ctx.translate(-this.camera_x, 0);
+    }
+    
 
-        this.ctx.translate(-this.camera_x, 0); // camera back
-        // -------- Space for fixed objectes ---------
+    drawFixedObjects() {
+        // Fixed objects like status bar, bottle, coin, etc.
         this.addToMap(this.statusBar);
         this.addToMap(this.bottle);
         this.addToMap(this.coin);
         this.addToMap(this.soundElement);
         this.addToMap(this.restartElement);
-
-        //wenn x achse erreicht wird 
+    
         if (this.character.x >= 2050) {
             this.endbossStatusBarVisible = true;
             this.addToMap(this.endbossStatusbar);
             this.addToMap(this.healthElement);
         }
-
-        // immer anzeigen der Endboss-Statusleiste 
+    
         if (this.endbossStatusBarVisible) {
             this.addToMap(this.endbossStatusbar);
             this.addToMap(this.healthElement);
         }
+    }
+    
 
-        this.ctx.translate(this.camera_x, 0); // camera forwards
-
+    drawDynamicObjects() {
+        this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.clouds);
         this.addToMap(this.character);
         this.addObjectsToMap(this.coins);
@@ -274,16 +289,7 @@ class World extends MovableObject {
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.smallEnemies);
         this.addObjectsToMap(this.throwAbleObject);
-
-
-
         this.ctx.translate(-this.camera_x, 0);
-
-        //Draw() wird immer wieder aufgerufen
-        let self = this;
-        requestAnimationFrame(function () {
-            self.draw();
-        });
     }
 
 
@@ -406,12 +412,12 @@ class World extends MovableObject {
             document.getElementById("endScreen").classList.remove("d-none");
             document.getElementById("endScreen").style.display = "block";
             document.querySelector(".hud").style.display = 'none';
-            
+
             if (this.character.isDead()) {
                 document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
             } else {
                 document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/won_2.png')";
             }
         }
-    }    
+    }
 }

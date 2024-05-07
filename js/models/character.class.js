@@ -1,7 +1,7 @@
 class Character extends MovableObject {
 
     height = 280;
-    y = 70;
+    y = -25;
     speed = 7;
     currentEnemy;
     energy = 100;
@@ -123,28 +123,36 @@ class Character extends MovableObject {
      */
     moveCharacter() {
         this.walking_sound.pause();
-        if (this.canMoveRight() && this.isAlive && world.endboss.isAlive) {
-            this.moveRight();
-        }
-        if (this.canMoveLeft() && this.isAlive && world.endboss.isAlive) {
-            this.moveLeft();
-        }
-        if (this.canJump()) {
-            this.jump();
-            if (this.world.soundElement.isMuted && this.isAlive && world.endboss.isAlive) {
-                this.jump_sound.play();
-            }
-        }
-        if (this.canJumpSpace()) {
-            this.jump();
-            if (this.world.soundElement.isMuted && this.isAlive && world.endboss.isAlive) {
-                this.jump_sound.play();
-            }
-        }        
+        this.handleMovement(); 
+        this.handleJump(); 
         if (this.leftOrRight()) {
             this.sleepAnimationActive = false;
         }
         this.world.camera_x = -this.x + 100;
+    }
+
+    
+    handleMovement() {
+        if (this.isAlive && world.endboss.isAlive) {
+            if (this.canMoveRight()) {
+                this.moveRight();
+            }
+            if (this.canMoveLeft()) {
+                this.moveLeft();
+            }
+        }
+    }
+    
+
+    handleJump() {
+        if (this.isAlive && world.endboss.isAlive) {
+            if (this.canJump() || this.canJumpSpace()) {
+                this.jump();
+                if (this.world.soundElement.isMuted) {
+                    this.jump_sound.play();
+                }
+            }
+        }
     }
     
 
@@ -432,23 +440,32 @@ class Character extends MovableObject {
      */
     bottleHitEnemy(enemy, index) {
         if (enemy instanceof Endboss) {
-            if (this.world.endbossStatusbar.percentage <= 0) {
-                enemy.deadAnimation();
-                if (this.world.soundElement.isMuted) {
-                    this.dead_chicken.play();
-                }
-                this.removeEnemy(enemy, index);
-                setStoppableInterval(() => this.world.showEndScreen(), 1000);
-            } else {
-                enemy.endbossHurt(50);
-            }
+            this.handleEndbossHit(enemy);
         } else {
-            this.removeEnemy(enemy, index);
+            this.removeEnemyAndPlaySound(enemy, index);
+        }
+    }
+    
+
+    handleEndbossHit(enemy) {
+        if (this.world.endbossStatusbar.percentage <= 0) {
+            enemy.deadAnimation();
             if (this.world.soundElement.isMuted) {
                 this.dead_chicken.play();
             }
+            setStoppableInterval(() => this.world.showEndScreen(), 1000);
+        } else {
+            enemy.endbossHurt(50);
         }
     }
+    
+
+    removeEnemyAndPlaySound(enemy, index) {
+        this.removeEnemy(enemy, index);
+        if (this.world.soundElement.isMuted) {
+            this.dead_chicken.play();
+        }
+    }    
 
 
     /**
