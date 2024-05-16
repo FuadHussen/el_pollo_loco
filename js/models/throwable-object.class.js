@@ -96,7 +96,7 @@ class ThrowAbleObject extends MovableObject {
             if (!this.splashPlayed) {
                 this.playSplashAnimation();
                 this.splashPlayed = true;
-                if (this.world.soundElement.isMuted) { // Check if sound is not muted
+                if (!isMuted) { // Check if sound is not muted
                     this.bottle_break.play(); 
                 }
             }

@@ -2,7 +2,7 @@ class Endboss extends MovableObject {
 
     width = 350;
     height = 350;
-    y = 80;
+    y = 100;
     endbossStatusbar = new EndbossStatusBar();
 
 
@@ -103,7 +103,7 @@ class Endboss extends MovableObject {
      */
     characterOnX(animationInterval) {
         if (world.character.x >= 2050 && !this.endbossSoundPlayed) {
-            if (world.soundElement.isMuted) {
+            if (!isMuted) {
                 this.endboss_sound.play();
             }
             this.endbossSoundPlayed = true;

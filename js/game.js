@@ -5,6 +5,8 @@ let keyboard = new Keyboard();
 let intervalIds = [];
 let i = 1;
 let background_sound = new Audio('audio/backgroundSound.mp3');
+let isMuted = false;
+let gameRestarted = false;
 
 
 function init() {
@@ -25,6 +27,31 @@ function init() {
 
         world = new World(canvas, keyboard);
         document.querySelector('.hud').style.display = 'flex';
+
+        const soundOn = document.createElement('img');
+        soundOn.setAttribute('id', 'soundOn');
+        soundOn.setAttribute('class', 'sound');
+        soundOn.setAttribute('src', 'img/sound-modified.png');
+        soundOn.setAttribute('alt', '');
+        soundOn.setAttribute('onclick', 'toggleSound()');
+        document.querySelector('.canvas-container').appendChild(soundOn);
+    
+        const soundOff = document.createElement('img');
+        soundOff.setAttribute('id', 'soundOff');
+        soundOff.setAttribute('class', 'sound');
+        soundOff.setAttribute('src', 'img/mute-modified.png');
+        soundOff.setAttribute('alt', '');
+        soundOff.setAttribute('onclick', 'toggleSound()');
+        soundOff.style.display = 'none';
+        document.querySelector('.canvas-container').appendChild(soundOff);
+
+        const restartButton = document.createElement('img');
+        restartButton.setAttribute('id', 'restartBtn');
+        restartButton.setAttribute('class', 'restartBtn');
+        restartButton.setAttribute('src', 'img/restart.png');
+        restartButton.setAttribute('alt', '');
+        restartButton.setAttribute('onclick', 'toggleRestart()');
+        document.querySelector('.canvas-container').appendChild(restartButton);
     });
 
     setStoppableInterval();
@@ -33,7 +60,9 @@ function init() {
 
 
 function newGame() {
-    window.location.reload();
+    gameRestart = true;
+    document.getElementById("endScreen").style.display = 'none'; 
+    init();
 }
 
 
@@ -221,3 +250,27 @@ window.addEventListener("touchend", (e) => {
     keyboard.LEFT = false;
     keyboard.D = false;
 });
+
+
+function toggleSound() {
+    document.getElementById('soundOn').style.display = 'block';
+    document.getElementById('soundOff').style.display = 'none';
+    let soundOn = document.getElementById('soundOn');
+    let soundOff = document.getElementById('soundOff');
+
+    if (isMuted) {
+        background_sound.play();
+        soundOn.style.display = 'block';
+        soundOff.style.display = 'none';
+    } else {
+        background_sound.pause();
+        soundOn.style.display = 'none';
+        soundOff.style.display = 'block';
+    }
+
+    isMuted = !isMuted;
+}
+
+function toggleRestart() {
+    window.location.reload();
+}

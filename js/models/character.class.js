@@ -146,15 +146,20 @@ class Character extends MovableObject {
 
     handleJump() {
         if (this.isAlive && world.endboss.isAlive) {
+            // Wenn der Charakter den Endboss berührt, wird keine Animation abgespielt
+            if (this.isColliding(world.endboss)) {
+                return;
+            }
+    
             if (this.canJump() || this.canJumpSpace()) {
                 this.jump();
-                if (this.world.soundElement.isMuted) {
+                if (!isMuted) {
                     this.jump_sound.play();
                 }
             }
         }
     }
-    
+        
 
     /**
      * Checks if the character can jump.
@@ -198,7 +203,7 @@ class Character extends MovableObject {
     moveRight() {
         super.moveRight();
         this.otherDirection = false;
-        if (this.world.soundElement.isMuted) {
+        if (!isMuted) {
             this.walking_sound.play();
         }
     }
@@ -210,7 +215,7 @@ class Character extends MovableObject {
     moveLeft() {
         super.moveLeft();
         this.otherDirection = true;
-        if (this.world.soundElement.isMuted) {
+        if (!isMuted) {
             this.walking_sound.play();
         }
     }
@@ -289,7 +294,7 @@ class Character extends MovableObject {
      * Plays the snoring sound.
      */
     playSnoringSound() {
-        if (this.world.soundElement.isMuted && world.endboss.isAlive) {
+        if (!isMuted && world.endboss.isAlive) {
             this.snoring_sound.play();
         }
     }
@@ -327,7 +332,7 @@ class Character extends MovableObject {
      */
     characterHurt() {
         this.playAnimation(this.IMAGES_HURT);
-        if (this.world.soundElement.isMuted) {
+        if (!isMuted) {
             this.hurt_sound.play();
         }
     }
@@ -380,7 +385,7 @@ class Character extends MovableObject {
         if (this.jumpOnEnemy(enemy)) {
             this.removeEnemy(enemy, index);
             this.jump();
-            if (this.world.soundElement.isMuted) {
+            if (!isMuted) {
                 this.dead_chicken.play();
             }
         }
@@ -450,7 +455,7 @@ class Character extends MovableObject {
     handleEndbossHit(enemy) {
         if (this.world.endbossStatusbar.percentage <= 0) {
             enemy.deadAnimation();
-            if (this.world.soundElement.isMuted) {
+            if (!isMuted) {
                 this.dead_chicken.play();
             }
             setStoppableInterval(() => this.world.showEndScreen(), 1000);
@@ -462,7 +467,7 @@ class Character extends MovableObject {
 
     removeEnemyAndPlaySound(enemy, index) {
         this.removeEnemy(enemy, index);
-        if (this.world.soundElement.isMuted) {
+        if (!isMuted) {
             this.dead_chicken.play();
         }
     }    

@@ -11,8 +11,6 @@ class World extends MovableObject {
     endboss = new Endboss();
     endbossStatusbar = new EndbossStatusBar();
     healthElement = new HealthElement();
-    soundElement = new Sound(650, 75);
-    restartElement = new Restart(600, 75);
     endbossStatusBarVisible = false;
     coins = [];
     bottles = [];
@@ -29,44 +27,7 @@ class World extends MovableObject {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.setupClickEvent();
-        this.setupRestartEvent();
         this.setupWorld();
-    }
-
-
-    /**
-     * Sets up the click event listeners for sound and restart elements.
-     */
-    setupClickEvent() {
-        this.canvas.addEventListener('click', (event) => {
-            const rect = this.canvas.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
-
-            if (this.isCollidingWithSoundElement(x, y)) {
-                this.soundElement.toggleSound();
-                event.stopPropagation();
-            }
-        });
-    }
-
-
-    /**
-     * Sets up the click event listeners for the restart element.
-     */
-    setupRestartEvent() {
-        this.canvas.addEventListener('click', (event) => {
-            const rect = this.canvas.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
-
-            if (this.isCollidingWithRestartElement(x, y)) {
-                this.restartElement.toggleRestart();
-                window.location.reload();
-                event.stopPropagation();
-            }
-        });
     }
 
 
@@ -80,48 +41,6 @@ class World extends MovableObject {
         if (gameStarted) {
             this.run();
         }
-    }
-
-
-    /**
-     * Checks if the given coordinates are within the sound element's area.
-     * @param {number} x - The x-coordinate of the point.
-     * @param {number} y - The y-coordinate of the point.
-     * @returns {boolean} - True if the coordinates are within the sound element's area, otherwise false.
-     */
-    isCollidingWithSoundElement(x, y) {
-        const soundX = this.soundElement.x;
-        const soundY = this.soundElement.y;
-        const soundWidth = this.soundElement.width;
-        const soundHeight = this.soundElement.height;
-
-        return (
-            x >= soundX &&
-            x <= soundX + soundWidth &&
-            y >= soundY &&
-            y <= soundY + soundHeight
-        );
-    }
-
-
-    /**
-     * Checks if the given coordinates are within the restart element's area.
-     * @param {number} x - The x-coordinate of the point.
-     * @param {number} y - The y-coordinate of the point.
-     * @returns {boolean} - True if the coordinates are within the restart element's area, otherwise false.
-     */
-    isCollidingWithRestartElement(x, y) {
-        const soundX = this.restartElement.x;
-        const soundY = this.restartElement.y;
-        const soundWidth = this.restartElement.width;
-        const soundHeight = this.restartElement.height;
-
-        return (
-            x >= soundX &&
-            x <= soundX + soundWidth &&
-            y >= soundY &&
-            y <= soundY + soundHeight
-        );
     }
 
 
@@ -168,19 +87,20 @@ class World extends MovableObject {
     collisionEnemy() {
         this.level.enemies.forEach(enemy => {
             if (!enemy.isDead() && this.character.isColliding(enemy)) {
-                if (this.character.isAboveGround(enemy) && !this.character.isHurt()) {
-                    enemy.energy = 0;
+                if (enemy instanceof Endboss) {
+                    this.character.hitByEndboss(100);
                 } else {
-                    if (enemy instanceof Endboss) {
-                        this.character.hitByEndboss(100);
+                    if (this.character.isAboveGround(enemy) && !this.character.isHurt()) {
+                        enemy.energy = 0;
                     } else {
                         this.character.hit();
+                        this.statusBar.setPercentage(this.character.energy);
                     }
-                    this.statusBar.setPercentage(this.character.energy);
                 }
             }
         });
     }
+
 
 
     /**
@@ -195,7 +115,7 @@ class World extends MovableObject {
                 this.bottle_collect.play();
                 this.bottles.splice(i, 1);
                 i--;
-            } else if (!this.soundElement.isMuted) {
+            } else if (isMuted) {
                 this.bottle_collect.pause();
             }
         }
@@ -217,7 +137,7 @@ class World extends MovableObject {
                 }
             }
         }
-        if (!this.soundElement.isMuted) {
+        if (isMuted) {
             this.coin_collect.pause();
         }
     }
@@ -240,45 +160,43 @@ class World extends MovableObject {
      */
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
+
         this.drawBackground();
         this.drawFixedObjects();
         this.drawDynamicObjects();
-    
+
         let self = this;
         requestAnimationFrame(function () {
             self.draw();
         });
     }
-    
-    
+
+
     drawBackground() {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
         this.ctx.translate(-this.camera_x, 0);
     }
-    
+
 
     drawFixedObjects() {
         // Fixed objects like status bar, bottle, coin, etc.
         this.addToMap(this.statusBar);
         this.addToMap(this.bottle);
         this.addToMap(this.coin);
-        this.addToMap(this.soundElement);
-        this.addToMap(this.restartElement);
-    
+
         if (this.character.x >= 2050) {
             this.endbossStatusBarVisible = true;
             this.addToMap(this.endbossStatusbar);
             this.addToMap(this.healthElement);
         }
-    
+
         if (this.endbossStatusBarVisible) {
             this.addToMap(this.endbossStatusbar);
             this.addToMap(this.healthElement);
         }
     }
-    
+
 
     drawDynamicObjects() {
         this.ctx.translate(this.camera_x, 0);
@@ -344,7 +262,6 @@ class World extends MovableObject {
      * Generates background objects for the game world.
      */
     generateBackgroundObjects() {
-
         for (let i = -this.totalBackgrounds; i < this.totalBackgrounds; i++) {
             let setOffset = i * this.backgroundWidth * this.backgroundsPerSet;
             this.generateBackground(setOffset);
@@ -413,10 +330,16 @@ class World extends MovableObject {
             document.getElementById("endScreen").style.display = "block";
             document.querySelector(".hud").style.display = 'none';
 
-            if (this.character.isDead()) {
+            if (this.character.isDead() || this.endboss.x <= -300 || newGame()) {
                 document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
+                document.getElementById("soundOn").style.display = "none";
+                document.getElementById("soundOff").style.display = "none";
+                document.getElementById("restartBtn").style.display = "none";
             } else {
                 document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/won_2.png')";
+                document.getElementById("soundOn").style.display = "none";
+                document.getElementById("soundOff").style.display = "none";
+                document.getElementById("restartBtn").style.display = "none";
             }
         }
     }

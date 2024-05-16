@@ -223,6 +223,29 @@ canvas {
     font-size: 24px;
 }
 
+#soundOn {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 75px;
+    left: 650px;
+}
+
+#soundOff {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 75px;
+    left: 650px;
+}
+
+#restartBtn {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 75px;
+    left: 600px;
+}
 
 @media only screen and (max-width: 760px) {
     canvas {
@@ -250,6 +273,32 @@ canvas {
 
     h1 {
         display: none;
+    }
+}
+
+@media only screen and (max-height: 400px) {
+    #soundOn {
+        width: 30px;
+        height: 30px;
+        position: fixed;
+        top: 75px;
+        left: 650px;
+    }
+    
+    #soundOff {
+        width: 30px;
+        height: 30px;
+        position: fixed;
+        top: 75px;
+        left: 650px;
+    }
+    
+    #restartBtn {
+        width: 30px;
+        height: 30px;
+        position: fixed;
+        top: 75px;
+        left: 600px;
     }
 }
 
