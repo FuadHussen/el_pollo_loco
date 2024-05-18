@@ -17,6 +17,7 @@ class World extends MovableObject {
     activeBottles = [];
     throwAbleObject = [];
     pickedUpBottles = 0;
+    showEndScreenCalled = false;
 
     bottle_collect = new Audio('audio/collectBottle.mp3');
     coin_collect = new Audio('audio/collectCoin.mp3');
@@ -315,6 +316,9 @@ class World extends MovableObject {
      * Shows the end screen when the game ends.
      */
     showEndScreen() {
+        if (this.showEndScreenCalled) return; // Verhindere mehrfaches Aufrufen
+        this.showEndScreenCalled = true;
+
         if (window.matchMedia('(max-width: 665px)').matches) {
             let mobileAlert = document.getElementById('mobileAlert');
             mobileAlert.classList.remove('d-none');
@@ -330,16 +334,20 @@ class World extends MovableObject {
             document.getElementById("endScreen").style.display = "block";
             document.querySelector(".hud").style.display = 'none';
 
-            if (this.character.isDead() || this.endboss.x <= -300 || newGame()) {
+            if (this.character.isDead()) {
                 document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
-                document.getElementById("soundOn").style.display = "none";
-                document.getElementById("soundOff").style.display = "none";
-                document.getElementById("restartBtn").style.display = "none";
+                if (gameStarted) {
+                    document.getElementById("soundOn").style.display = "none";
+                    document.getElementById("soundOff").style.display = "none";
+                    document.getElementById("restartBtn").style.display = "none";
+                }
             } else {
                 document.getElementById("endScreen").style.backgroundImage = "url('img/9_intro_outro_screens/game_over/won_2.png')";
-                document.getElementById("soundOn").style.display = "none";
-                document.getElementById("soundOff").style.display = "none";
-                document.getElementById("restartBtn").style.display = "none";
+                if (gameStarted) {
+                    document.getElementById("soundOn").style.display = "none";
+                    document.getElementById("soundOff").style.display = "none";
+                    document.getElementById("restartBtn").style.display = "none";
+                }
             }
         }
     }

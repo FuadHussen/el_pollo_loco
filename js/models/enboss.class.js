@@ -4,7 +4,7 @@ class Endboss extends MovableObject {
     height = 350;
     y = 100;
     endbossStatusbar = new EndbossStatusBar();
-
+    endbossIsAlive = false;
 
     IMAGES_WALKING = [
         'img/4_enemie_boss_chicken/2_alert/G5.png',
@@ -56,15 +56,7 @@ class Endboss extends MovableObject {
      * Animates the end boss movement.
      */
     animate() {
-        let animationInterval;
-
-        let startAnimation = () => {
-            animationInterval = setStoppableInterval(() => this.endbossAnimation(), 200);
-        };
-
-        startAnimation();
-
-        // Überprüfen ob der Endboss die 2050 erreicht hat
+        setStoppableInterval(() => this.endbossAnimation(), 200);
         setStoppableInterval(() => this.characterOnX(), 200);
     }
 
@@ -77,7 +69,6 @@ class Endboss extends MovableObject {
             world.showEndScreen();
             return;
         }
-
         if (this.hadFirstContact) {
             this.playAnimation(this.ENDBOSS_WALKING);
         } else {
@@ -91,26 +82,18 @@ class Endboss extends MovableObject {
     }
 
 
-    moveLeft() {
-        if (this.isAlive) {
-            this.x -= 2;
-        }
-    }
-
-
     /**
      * Checks if the character has reached the X position to trigger end boss actions.
      */
-    characterOnX(animationInterval) {
-        if (world.character.x >= 2050 && !this.endbossSoundPlayed) {
+    characterOnX() {
+        if (world.character.x >= 2000 && !this.endbossSoundPlayed) {
             if (!isMuted) {
                 this.endboss_sound.play();
             }
             this.endbossSoundPlayed = true;
-            clearInterval(animationInterval);
             this.hadFirstContact = true;
             i = 0;
-            setStoppableInterval(() => this.moveLeft(), 1000 / 60);
+            setStoppableInterval(() => this.x -= 2, 1000 / 60);
         }
     }
 
@@ -149,10 +132,11 @@ class Endboss extends MovableObject {
         if (world.endbossStatusbar.percentage <= 0) {
             this.deadAnimation();
             world.endboss.isAlive = false;
-            setInterval(() => world.showEndScreen(), 1000);
+            setStoppableInterval(() => this.x = 0, 1250);
+            setStoppableInterval(() => world.showEndScreen(), 1000);
         }
         if (this.x < 125) {
-            setInterval(() => world.showEndScreen(), 1000);
+            setStoppableInterval(() => world.showEndScreen(), 1000);
         }
     }
 

@@ -6,6 +6,7 @@ let intervalIds = [];
 let i = 1;
 let background_sound = new Audio('audio/backgroundSound.mp3');
 let isMuted = false;
+let gameStarted = false;
 let gameRestarted = false;
 
 
@@ -17,52 +18,74 @@ function init() {
     }
 
     document.getElementById("startGame").addEventListener("click", function () {
-        document.getElementById("startScreen").style.display = 'none';
-        document.getElementById("canvas").classList.remove("d-none");
-        document.getElementById("startDiv").classList.add("d-none");
-        document.getElementById("startScreen").style.background = 'none';
-        background_sound.play();
-        initLevel();
-        gameStarted = true;
-
-        world = new World(canvas, keyboard);
-        document.querySelector('.hud').style.display = 'flex';
-
-        const soundOn = document.createElement('img');
-        soundOn.setAttribute('id', 'soundOn');
-        soundOn.setAttribute('class', 'sound');
-        soundOn.setAttribute('src', 'img/sound-modified.png');
-        soundOn.setAttribute('alt', '');
-        soundOn.setAttribute('onclick', 'toggleSound()');
-        document.querySelector('.canvas-container').appendChild(soundOn);
-    
-        const soundOff = document.createElement('img');
-        soundOff.setAttribute('id', 'soundOff');
-        soundOff.setAttribute('class', 'sound');
-        soundOff.setAttribute('src', 'img/mute-modified.png');
-        soundOff.setAttribute('alt', '');
-        soundOff.setAttribute('onclick', 'toggleSound()');
-        soundOff.style.display = 'none';
-        document.querySelector('.canvas-container').appendChild(soundOff);
-
-        const restartButton = document.createElement('img');
-        restartButton.setAttribute('id', 'restartBtn');
-        restartButton.setAttribute('class', 'restartBtn');
-        restartButton.setAttribute('src', 'img/restart.png');
-        restartButton.setAttribute('alt', '');
-        restartButton.setAttribute('onclick', 'toggleRestart()');
-        document.querySelector('.canvas-container').appendChild(restartButton);
+        startGame();
     });
 
-    setStoppableInterval();
     mobileAlert();
 }
 
+function startGame() {
+    updateStartScreen();
+    background_sound.play();
+    initLevel();
+    gameStarted = true;
+
+    world = new World(canvas, keyboard);
+    document.querySelector('.hud').style.display = 'flex';
+
+    if (gameStarted && !gameRestarted) { 
+        createRestartElement();
+        createSoundOnElement();
+        createSoundOffElement(); 
+    }
+    updateSoundIcons();
+    updateRestartIcon();
+}
+
+function updateStartScreen() {
+    document.getElementById("startScreen").style.display = 'none';
+    document.getElementById("canvas").classList.remove("d-none");
+    document.getElementById("startDiv").classList.add("d-none");
+    document.getElementById("startScreen").style.background = 'none';
+}
+
+function createSoundOnElement() {
+    const soundOn = document.createElement('img');
+    soundOn.setAttribute('id', 'soundOn');
+    soundOn.setAttribute('class', 'sound');
+    soundOn.setAttribute('src', 'img/sound-modified.png');
+    soundOn.setAttribute('alt', '');
+    soundOn.setAttribute('onclick', 'toggleSound()');
+    document.querySelector('.canvas-container').appendChild(soundOn);
+}
+
+function createSoundOffElement() {
+    const soundOff = document.createElement('img');
+    soundOff.setAttribute('id', 'soundOff');
+    soundOff.setAttribute('class', 'sound');
+    soundOff.setAttribute('src', 'img/mute-modified.png');
+    soundOff.setAttribute('alt', '');
+    soundOff.setAttribute('onclick', 'toggleSound()');
+    soundOff.style.display = 'none';
+    document.querySelector('.canvas-container').appendChild(soundOff);
+}
+
+function createRestartElement() {
+    const restartButton = document.createElement('img');
+    restartButton.setAttribute('id', 'restartBtn');
+    restartButton.setAttribute('class', 'restartBtn');
+    restartButton.setAttribute('src', 'img/restart.png');
+    restartButton.setAttribute('alt', '');
+    restartButton.setAttribute('onclick', 'toggleRestart()');
+    document.querySelector('.canvas-container').appendChild(restartButton);
+}
 
 function newGame() {
-    gameRestart = true;
-    document.getElementById("endScreen").style.display = 'none'; 
-    init();
+    gameRestarted = true;
+    document.getElementById("endScreen").classList.add('d-none');
+    stopGame();
+    setStoppableInterval();
+    startGame();
 }
 
 
@@ -253,8 +276,6 @@ window.addEventListener("touchend", (e) => {
 
 
 function toggleSound() {
-    document.getElementById('soundOn').style.display = 'block';
-    document.getElementById('soundOff').style.display = 'none';
     let soundOn = document.getElementById('soundOn');
     let soundOff = document.getElementById('soundOff');
 
@@ -269,6 +290,28 @@ function toggleSound() {
     }
 
     isMuted = !isMuted;
+}
+
+function updateSoundIcons() {
+    let soundOn = document.getElementById('soundOn');
+    let soundOff = document.getElementById('soundOff');
+
+    if (isMuted) {
+        soundOn.style.display = 'none';
+        soundOff.style.display = 'block';
+    } else {
+        soundOn.style.display = 'block';
+        soundOff.style.display = 'none';
+    }
+}
+
+function updateRestartIcon() {
+    let restartBtn = document.getElementById('restartBtn');
+    if (gameStarted || gameRestarted) {
+        restartBtn.style.display = 'block';
+    } else {
+        restartBtn.style.display = 'none';
+    }
 }
 
 function toggleRestart() {
