@@ -89,7 +89,8 @@ class World extends MovableObject {
         this.level.enemies.forEach(enemy => {
             if (!enemy.isDead() && this.character.isColliding(enemy)) {
                 if (enemy instanceof Endboss) {
-                    this.character.hitByEndboss(100);
+                    this.character.hitByEndboss(25);
+                    this.statusBar.setPercentage(this.character.energy);
                 } else {
                     if (this.character.isAboveGround(enemy) && !this.character.isHurt()) {
                         enemy.energy = 0;
@@ -236,11 +237,6 @@ class World extends MovableObject {
         }
     }
 
-
-    /**
-     * Flips the image horizontally for objects facing the opposite direction.
-     * @param {Object} mo - The object whose image is flipped.
-     */
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
@@ -248,16 +244,10 @@ class World extends MovableObject {
         this.ctx.scale(-1, 1);
     }
 
-
-    /**
-     * Restores the image orientation after flipping.
-     * @param {Object} mo - The object whose image orientation is restored.
-     */
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
     }
-
 
     /**
      * Generates background objects for the game world.

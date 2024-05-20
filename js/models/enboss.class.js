@@ -5,7 +5,8 @@ class Endboss extends MovableObject {
     y = 100;
     endbossStatusbar = new EndbossStatusBar();
     endbossIsAlive = false;
-
+    otherDirection = false;
+    speed = 2;
     IMAGES_WALKING = [
         'img/4_enemie_boss_chicken/2_alert/G5.png',
         'img/4_enemie_boss_chicken/2_alert/G6.png',
@@ -39,7 +40,9 @@ class Endboss extends MovableObject {
     hadFirstContact = false;
     currentImageIndexHurt = 0;
     endboss_sound = new Audio('audio/endbossSound.mp3');
-
+    endbossSoundPlayed = false;
+    endbossMovementInterval;
+    direction = -1;
 
     constructor() {
         super().loadImage('img/4_enemie_boss_chicken/2_alert/G5.png');
@@ -51,7 +54,6 @@ class Endboss extends MovableObject {
         this.animate();
     }
 
-
     /**
      * Animates the end boss movement.
      */
@@ -59,7 +61,6 @@ class Endboss extends MovableObject {
         setStoppableInterval(() => this.endbossAnimation(), 200);
         setStoppableInterval(() => this.characterOnX(), 200);
     }
-
 
     /**
      * Animates the end boss movement and actions.
@@ -81,7 +82,6 @@ class Endboss extends MovableObject {
         }
     }
 
-
     /**
      * Checks if the character has reached the X position to trigger end boss actions.
      */
@@ -93,8 +93,34 @@ class Endboss extends MovableObject {
             this.endbossSoundPlayed = true;
             this.hadFirstContact = true;
             i = 0;
-            setStoppableInterval(() => this.x -= 2, 1000 / 60);
+            this.endbossMovementInterval = setStoppableInterval(() => this.moveTowardsCharacter(), 1000 / 60);
         }
+    }
+
+
+    /**
+     * Moves the end boss to the left.
+     */
+    moveTowardsCharacter() {
+        if (!this.isAlive) {
+            clearInterval(this.endbossMovementInterval);
+            return;
+        }
+        if (this.x > world.character.x - 300) {
+            this.moveLeft();
+            this.otherDirection = false;
+        } else {
+            this.moveRight();
+            this.otherDirection = true;
+        }
+    }
+
+    moveLeft() {
+        this.x -= this.speed;
+    }
+
+    moveRight() {
+        this.x += this.speed;
     }
 
 
@@ -113,7 +139,6 @@ class Endboss extends MovableObject {
         }, 1000 / 10);
     }
 
-
     /**
      * Updates the end boss status after being hurt.
      * @param {number} damage - The amount of damage taken.
@@ -124,14 +149,14 @@ class Endboss extends MovableObject {
         this.endbossDead();
     }
 
-
     /**
      * Triggers the dead animation of the end boss.
      */
     endbossDead() {
         if (world.endbossStatusbar.percentage <= 0) {
             this.deadAnimation();
-            world.endboss.isAlive = false;
+            this.isAlive = false; // Use this.isAlive instead of world.endboss.isAlive
+            clearInterval(this.endbossMovementInterval); // Stop the movement interval
             setStoppableInterval(() => this.x = 0, 1250);
             setStoppableInterval(() => world.showEndScreen(), 1000);
         }
@@ -139,7 +164,6 @@ class Endboss extends MovableObject {
             setStoppableInterval(() => world.showEndScreen(), 1000);
         }
     }
-
 
     /**
      * Plays the dead animation of the end boss.
