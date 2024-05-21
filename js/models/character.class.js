@@ -74,6 +74,7 @@ class Character extends MovableObject {
 
     isWalking = false;
     sleepAnimationActive = false;
+    isJumping = false;
 
 
     constructor() {
@@ -222,19 +223,22 @@ class Character extends MovableObject {
 
 
     playJumpAnimation() {
-        this.currentImage = 0;
-        let intervalId = setInterval(() => {
-            if (this.currentImage < this.IMAGES_JUMPING.length - 1) {
-                this.playAnimation(this.IMAGES_JUMPING);
-                this.currentImage++;
-            } else {
-                if (!this.isAboveGround()) {
-                    clearInterval(intervalId);
+        if (!this.isJumping) {
+            this.isJumping = true;
+            this.currentImage = 0;
+            let intervalId = setInterval(() => {
+                if (this.currentImage < this.IMAGES_JUMPING.length - 1) {
+                    this.playAnimation(this.IMAGES_JUMPING);
+                    this.currentImage++;
+                } else {
+                    if (!this.isAboveGround()) {
+                        clearInterval(intervalId);
+                        this.isJumping = false;
+                    }
                 }
-            }
-        }, 100);
+            }, 100);
+        }
     }
-
 
 
     /**
@@ -246,7 +250,9 @@ class Character extends MovableObject {
         } else if (this.isHurt()) {
             this.characterHurt();
         } else if (this.isAboveGround()) {
-            this.playJumpAnimation(this.IMAGES_JUMPING);
+            if (!this.isJumping) {
+                this.playJumpAnimation();
+            }
         } else if (this.checkInactivity()) {
             this.playSleepAnimation();
         } else {

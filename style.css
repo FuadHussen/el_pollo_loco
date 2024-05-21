@@ -276,7 +276,7 @@ canvas {
     }
 }
 
-@media only screen and (max-height: 400px) {
+@media only screen and (max-width: 400px) {
     #soundOn {
         width: 30px;
         height: 30px;
@@ -320,10 +320,57 @@ canvas {
     h1 {
         display: none;
     }
+
+    #soundOn {
+        width: 30px;
+        height: 30px;
+        position: fixed;
+        top: 75px;
+    }
+    
+    #soundOff {
+        width: 30px;
+        height: 30px;
+        position: fixed;
+        top: 75px;
+    }
+    
+    #restartBtn {
+        width: 30px;
+        height: 30px;
+        position: fixed;
+        top: 75px;
+    }
 }
 
 @media only screen and (min-width: 901px) {
     .hud {
         display: none !important;
+    }
+}
+
+@media only screen and (max-width: 668px) {
+    #soundOn {
+        width: 30px;
+        height: 30px;
+        position: fixed;
+        left: 550px;
+        top: 75px;
+    }
+    
+    #soundOff {
+        width: 30px;
+        height: 30px;
+        position: fixed;
+        left: 550px;
+        top: 75px;
+    }
+    
+    #restartBtn {
+        width: 30px;
+        height: 30px;
+        position: fixed;
+        left: 500px;
+        top: 75px;
     }
 }

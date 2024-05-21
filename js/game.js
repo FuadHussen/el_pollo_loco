@@ -56,7 +56,7 @@ function createSoundOnElement() {
     soundOn.setAttribute('src', 'img/sound-modified.png');
     soundOn.setAttribute('alt', '');
     soundOn.setAttribute('onclick', 'toggleSound()');
-    document.querySelector('.canvas-container').appendChild(soundOn);
+    document.getElementById('restartAndSoundBtn').appendChild(soundOn);
 }
 
 function createSoundOffElement() {
@@ -67,7 +67,7 @@ function createSoundOffElement() {
     soundOff.setAttribute('alt', '');
     soundOff.setAttribute('onclick', 'toggleSound()');
     soundOff.style.display = 'none';
-    document.querySelector('.canvas-container').appendChild(soundOff);
+    document.getElementById('restartAndSoundBtn').appendChild(soundOff);
 }
 
 function createRestartElement() {
@@ -77,7 +77,7 @@ function createRestartElement() {
     restartButton.setAttribute('src', 'img/restart.png');
     restartButton.setAttribute('alt', '');
     restartButton.setAttribute('onclick', 'toggleRestart()');
-    document.querySelector('.canvas-container').appendChild(restartButton);
+    document.getElementById('restartAndSoundBtn').appendChild(restartButton);
 }
 
 function newGame() {
