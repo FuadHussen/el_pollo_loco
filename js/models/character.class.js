@@ -75,6 +75,7 @@ class Character extends MovableObject {
     isWalking = false;
     sleepAnimationActive = false;
     isJumping = false;
+    isMoving = false;
 
 
     constructor() {
@@ -256,7 +257,7 @@ class Character extends MovableObject {
         } else if (this.checkInactivity()) {
             this.playSleepAnimation();
         } else {
-            if (!this.sleepAnimationActive) {
+            if (!this.sleepAnimationActive && !this.isMoving) {
                 this.loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
             }
             this.move();
@@ -349,8 +350,11 @@ class Character extends MovableObject {
      */
     move() {
         if (this.leftOrRight()) {
+            this.isMoving = true;
             this.playAnimation(this.IMAGES_WALKING);
             this.lastMovementTime = Date.now();
+        } else {
+            this.isMoving = false;
         }
     }
 
