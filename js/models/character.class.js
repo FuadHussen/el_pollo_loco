@@ -76,7 +76,7 @@ class Character extends MovableObject {
     sleepAnimationActive = false;
     isJumping = false;
     isMoving = false;
-
+    idleImageLoaded = false;
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -125,15 +125,15 @@ class Character extends MovableObject {
      */
     moveCharacter() {
         this.walking_sound.pause();
-        this.handleMovement(); 
-        this.handleJump(); 
+        this.handleMovement();
+        this.handleJump();
         if (this.leftOrRight()) {
             this.sleepAnimationActive = false;
         }
         this.world.camera_x = -this.x + 100;
     }
 
-    
+
     handleMovement() {
         if (this.isAlive && world.endboss.isAlive) {
             if (this.canMoveRight()) {
@@ -144,7 +144,7 @@ class Character extends MovableObject {
             }
         }
     }
-    
+
 
     handleJump() {
         if (this.isAlive && world.endboss.isAlive) {
@@ -152,7 +152,7 @@ class Character extends MovableObject {
             if (this.isColliding(world.endboss)) {
                 return;
             }
-    
+
             if (this.canJump() || this.canJumpSpace()) {
                 this.jump();
                 if (!isMuted) {
@@ -161,7 +161,7 @@ class Character extends MovableObject {
             }
         }
     }
-        
+
 
     /**
      * Checks if the character can jump.
@@ -253,14 +253,28 @@ class Character extends MovableObject {
         } else if (this.isAboveGround()) {
             if (!this.isJumping) {
                 this.playJumpAnimation();
+                this.idleImageLoaded = false;
             }
         } else if (this.checkInactivity()) {
             this.playSleepAnimation();
+            this.idleImageLoaded = false;
         } else {
-            if (!this.sleepAnimationActive && !this.isMoving) {
-                this.loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
-            }
+            this.resetStandardImage();
             this.move();
+        }
+    }
+
+
+    resetStandardImage() {
+        if (!this.sleepAnimationActive && !this.isMoving) {
+            if (!this.idleImageLoaded) {
+                let idleImagePath = 'img/2_character_pepe/1_idle/idle/I-1.png';
+                this.loadImage(idleImagePath);
+                console.log('idle');
+                this.idleImageLoaded = true;
+            }
+        } else {
+            this.idleImageLoaded = false;
         }
     }
 
@@ -460,7 +474,7 @@ class Character extends MovableObject {
             this.removeEnemyAndPlaySound(enemy, index);
         }
     }
-    
+
 
     handleEndbossHit(enemy) {
         if (this.world.endbossStatusbar.percentage <= 0) {
@@ -473,14 +487,14 @@ class Character extends MovableObject {
             enemy.endbossHurt(50);
         }
     }
-    
+
 
     removeEnemyAndPlaySound(enemy, index) {
         this.removeEnemy(enemy, index);
         if (!isMuted) {
             this.dead_chicken.play();
         }
-    }    
+    }
 
 
     /**
