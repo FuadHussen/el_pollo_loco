@@ -270,7 +270,6 @@ class Character extends MovableObject {
             if (!this.idleImageLoaded) {
                 let idleImagePath = 'img/2_character_pepe/1_idle/idle/I-1.png';
                 this.loadImage(idleImagePath);
-                console.log('idle');
                 this.idleImageLoaded = true;
             }
         } else {
