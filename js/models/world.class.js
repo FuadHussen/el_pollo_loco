@@ -111,7 +111,7 @@ class World extends MovableObject {
     collisionBottle() {
         for (let i = 0; i < this.bottles.length; i++) {
             let bottle = this.bottles[i];
-            if (this.character.isColliding(bottle) && this.bottle.percentage < 100) {
+            if (this.character.isCollidingCoinAndBottle(bottle) && this.bottle.percentage < 100) {
                 this.bottle.setPercentage(this.bottle.percentage + 20);
                 this.pickedUpBottles++;
                 this.bottle_collect.play();
@@ -130,7 +130,7 @@ class World extends MovableObject {
     collisionCoin() {
         for (let i = 0; i < this.coins.length; i++) {
             let coin = this.coins[i];
-            if (this.character.isColliding(coin)) {
+            if (this.character.isCollidingCoinAndBottle(coin)) {
                 this.coin.setPercentage(this.coin.percentage + 10);
                 if (this.coin.percentage <= 100) {
                     this.coins.splice(i, 1);

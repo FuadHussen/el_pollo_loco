@@ -34,12 +34,22 @@ class MovableObject extends DrawableObject {
      */
     isColliding(obj) {
         return (
-            this.x + this.width >= obj.x &&
-            this.y + this.height >= obj.y &&
-            this.x <= obj.x + obj.width &&
-            this.y <= obj.y + obj.height
+            this.x /*- 50*/ + this.width > obj.x &&
+            this.y + this.height > obj.y &&
+            this.x < obj.x + obj.width &&
+            this.y < obj.y + obj.height
         );
-    }    
+    }   
+    
+    
+    isCollidingCoinAndBottle(obj) {
+        return (
+            this.x - 75 + this.width > obj.x &&
+            this.y + this.height > obj.y &&
+            this.x < obj.x + obj.width &&
+            this.y < obj.y + obj.height
+        );
+    }  
 
 
     /**

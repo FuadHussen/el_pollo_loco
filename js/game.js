@@ -26,17 +26,17 @@ function init() {
 
 function startGame() {
     updateStartScreen();
-    background_sound.play();
     initLevel();
     gameStarted = true;
 
     world = new World(canvas, keyboard);
     document.querySelector('.hud').style.display = 'flex';
 
-    if (gameStarted && !gameRestarted) { 
+    if (gameStarted && !gameRestarted) {
         createRestartElement();
         createSoundOnElement();
-        createSoundOffElement(); 
+        createSoundOffElement();
+        background_sound.play();
     }
     updateSoundIcons();
     updateRestartIcon();
@@ -315,5 +315,5 @@ function updateRestartIcon() {
 }
 
 function toggleRestart() {
-    window.location.reload();
+    newGame();
 }
